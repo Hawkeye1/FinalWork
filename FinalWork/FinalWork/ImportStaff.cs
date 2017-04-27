@@ -53,7 +53,7 @@ namespace FinalWork
             }
             else
             {                                   // xls
-                excelData = ExcelReaderFactory.CreateOpenXmlReader(file);
+                excelData = ExcelReaderFactory.CreateBinaryReader(file);
             }
 
             DataSet data = excelData.AsDataSet();
