@@ -8,16 +8,14 @@ using ICSharpCode.SharpZipLib;
 namespace FinalWork
 {
     //Класс для обработки информации о списке сотрудникв кафедры
-    //Пока что без учёта принадлежности к кафедре
+    //Дописать сравнение списка с списком базы
     class ImportStaff
     {
         private Stream file;
+        int fileType;
 
-        
-        public void OpenFile(out int type)  // 1 - xls, 2 - xlsx
+        private void OpenFile()
         {
-            type = 0;
-
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = "c:\\";
             ofd.Filter = "xls files (*.xls)|*.xls|xlsx files (*.xlsx)|*.xlsx";
@@ -30,7 +28,7 @@ namespace FinalWork
                 {
                     if ((file = ofd.OpenFile()) != null)
                     {
-                        type = ofd.FilterIndex;
+                        fileType = ofd.FilterIndex;
                     }
                 }
                 catch (Exception ex)
@@ -39,26 +37,61 @@ namespace FinalWork
                 }
             }
         }
-
         public DataSet LoadData()
         {
-            int type;
             IExcelDataReader excelData;
 
-            OpenFile(out type);
+            OpenFile();
 
-            if (type == 2)                      // xlsx
+            if (fileType == 2)                       // xlsx
             {
                 excelData = ExcelReaderFactory.CreateOpenXmlReader(file);
             }
             else
-            {                                   // xls
+            {                                        // xls
                 excelData = ExcelReaderFactory.CreateBinaryReader(file);
             }
 
             DataSet data = excelData.AsDataSet();
+            excelData.Dispose();
 
             return data;
+        }
+        public DataTable DataProcessing(DBManagement DBM)
+        {
+            DataTable temp = new DataTable();
+            DataTable staffTable = new DataTable();
+            DataTable positions = DBM.GetPosition();
+            char delimer = ' ';                                     // Разделитель
+
+            temp = LoadData().Tables[1];
+            staffTable.Columns.Add("ФИО");
+
+            for (int i = 0; i < temp.Rows.Count; i++)
+            {
+                String[] Substring = temp.Rows[i][0].ToString().Split(delimer);
+
+                if (Substring[0].Equals("ФИО") || Substring[0].Equals("Кафедра") || Substring[0].Equals("Табель") ||
+                    Substring[0].Equals("кафедра") || Substring[0].Equals("Руководитель") || Substring[0].Equals("Ответственный") ||
+                    Substring[0].Equals("") || Substring[0].Equals("Приложение"))
+                {
+                    continue;
+                }
+                else
+                {
+                    for (int j = 0; j < positions.Rows.Count; j++)
+                    {
+                        if (positions.Rows[j][1].ToString() == temp.Rows[i][1].ToString())
+                        {
+                            staffTable.Rows.Add(temp.Rows[i][0]);
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            return staffTable;
         }
     }
 }

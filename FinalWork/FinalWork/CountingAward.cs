@@ -11,6 +11,8 @@ namespace FinalWork
 {
     public partial class CountingAward : Form
     {
+        DBManagement DBM;
+
         public CountingAward()
         {
             InitializeComponent();
@@ -19,13 +21,27 @@ namespace FinalWork
         private void ImportStaff_Click(object sender, EventArgs e)
         {
             ImportStaff IS = new ImportStaff();
+            DBM = new DBManagement();
 
-            DataSet data = new DataSet();
+            DataTable data = new DataTable();
 
-            data = IS.LoadData();
+            data = IS.DataProcessing(DBM);
 
-            tempGrid.DataSource = data.Tables[0];
+            tempGrid.DataSource = data;
         }
 
+        private void BlankStrip_Click(object sender, EventArgs e)
+        {
+            Form AB = new AwardBlank(this);
+            AB.Visible = true;
+            this.Enabled = false;
+        }
+
+        private void SettingStrip_Click(object sender, EventArgs e)
+        {
+            Form S = new Settings(this);
+            S.Visible = true;
+            this.Enabled = false;
+        }
     }
 }

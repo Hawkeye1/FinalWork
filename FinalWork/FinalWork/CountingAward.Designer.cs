@@ -29,10 +29,9 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.ImportStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.ImportStaffStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.ImportWorkTimeStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.BlankStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tempGrid = new System.Windows.Forms.DataGridView();
+            this.SettingStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempGrid)).BeginInit();
             this.SuspendLayout();
@@ -40,34 +39,20 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ImportStrip});
+            this.BlankStrip,
+            this.SettingStrip});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(784, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // ImportStrip
+            // BlankStrip
             // 
-            this.ImportStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ImportStaffStrip,
-            this.ImportWorkTimeStrip});
-            this.ImportStrip.Name = "ImportStrip";
-            this.ImportStrip.Size = new System.Drawing.Size(63, 20);
-            this.ImportStrip.Text = "Импорт";
-            // 
-            // ImportStaffStrip
-            // 
-            this.ImportStaffStrip.Name = "ImportStaffStrip";
-            this.ImportStaffStrip.Size = new System.Drawing.Size(232, 22);
-            this.ImportStaffStrip.Text = "Импорт списка сотрудников";
-            this.ImportStaffStrip.Click += new System.EventHandler(this.ImportStaff_Click);
-            // 
-            // ImportWorkTimeStrip
-            // 
-            this.ImportWorkTimeStrip.Name = "ImportWorkTimeStrip";
-            this.ImportWorkTimeStrip.Size = new System.Drawing.Size(232, 22);
-            this.ImportWorkTimeStrip.Text = "Импорт рабочего времени";
+            this.BlankStrip.Name = "BlankStrip";
+            this.BlankStrip.Size = new System.Drawing.Size(51, 20);
+            this.BlankStrip.Text = "Отчёт";
+            this.BlankStrip.Click += new System.EventHandler(this.BlankStrip_Click);
             // 
             // tempGrid
             // 
@@ -80,6 +65,13 @@
             this.tempGrid.ReadOnly = true;
             this.tempGrid.Size = new System.Drawing.Size(500, 300);
             this.tempGrid.TabIndex = 1;
+            // 
+            // SettingStrip
+            // 
+            this.SettingStrip.Name = "SettingStrip";
+            this.SettingStrip.Size = new System.Drawing.Size(79, 20);
+            this.SettingStrip.Text = "Настройки";
+            this.SettingStrip.Click += new System.EventHandler(this.SettingStrip_Click);
             // 
             // CountingAward
             // 
@@ -104,10 +96,9 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem ImportStrip;
-        private System.Windows.Forms.ToolStripMenuItem ImportStaffStrip;
-        private System.Windows.Forms.ToolStripMenuItem ImportWorkTimeStrip;
+        private System.Windows.Forms.ToolStripMenuItem BlankStrip;
         private System.Windows.Forms.DataGridView tempGrid;
+        private System.Windows.Forms.ToolStripMenuItem SettingStrip;
     }
 }
 
