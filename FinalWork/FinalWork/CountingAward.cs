@@ -12,16 +12,18 @@ namespace FinalWork
     public partial class CountingAward : Form
     {
         DBManagement DBM;
+        Options Op;
 
         public CountingAward()
         {
             InitializeComponent();
+            DBM = new DBManagement();
+            Op = new Options("settings.fw");
         }
 
         private void ImportStaff_Click(object sender, EventArgs e)
         {
             ImportStaff IS = new ImportStaff();
-            DBM = new DBManagement();
 
             DataTable data = new DataTable();
 
@@ -36,10 +38,9 @@ namespace FinalWork
             AB.Visible = true;
             this.Enabled = false;
         }
-
         private void SettingStrip_Click(object sender, EventArgs e)
         {
-            Form S = new Settings(this);
+            Form S = new Settings(this, Op);
             S.Visible = true;
             this.Enabled = false;
         }

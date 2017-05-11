@@ -30,8 +30,8 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.BlankStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.tempGrid = new System.Windows.Forms.DataGridView();
             this.SettingStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.tempGrid = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempGrid)).BeginInit();
             this.SuspendLayout();
@@ -54,24 +54,26 @@
             this.BlankStrip.Text = "Отчёт";
             this.BlankStrip.Click += new System.EventHandler(this.BlankStrip_Click);
             // 
-            // tempGrid
-            // 
-            this.tempGrid.AllowUserToAddRows = false;
-            this.tempGrid.AllowUserToDeleteRows = false;
-            this.tempGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tempGrid.Location = new System.Drawing.Point(13, 28);
-            this.tempGrid.MinimumSize = new System.Drawing.Size(500, 300);
-            this.tempGrid.Name = "tempGrid";
-            this.tempGrid.ReadOnly = true;
-            this.tempGrid.Size = new System.Drawing.Size(500, 300);
-            this.tempGrid.TabIndex = 1;
-            // 
             // SettingStrip
             // 
             this.SettingStrip.Name = "SettingStrip";
             this.SettingStrip.Size = new System.Drawing.Size(79, 20);
             this.SettingStrip.Text = "Настройки";
             this.SettingStrip.Click += new System.EventHandler(this.SettingStrip_Click);
+            // 
+            // tempGrid
+            // 
+            this.tempGrid.AllowUserToAddRows = false;
+            this.tempGrid.AllowUserToDeleteRows = false;
+            this.tempGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tempGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tempGrid.GridColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tempGrid.Location = new System.Drawing.Point(13, 28);
+            this.tempGrid.MinimumSize = new System.Drawing.Size(500, 300);
+            this.tempGrid.Name = "tempGrid";
+            this.tempGrid.ReadOnly = true;
+            this.tempGrid.Size = new System.Drawing.Size(500, 300);
+            this.tempGrid.TabIndex = 1;
             // 
             // CountingAward
             // 
