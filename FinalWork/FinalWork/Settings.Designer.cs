@@ -46,7 +46,7 @@
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 0;
-            this.cancelButton.Text = "Отмена";
+            this.cancelButton.Text = "Выход";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
@@ -152,7 +152,7 @@
             this.MinimumSize = new System.Drawing.Size(500, 250);
             this.Name = "Settings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Settings";
+            this.Text = "Настройки";
             ((System.ComponentModel.ISupportInitialize)(this.accuracyUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeUpDown)).EndInit();
             this.ResumeLayout(false);

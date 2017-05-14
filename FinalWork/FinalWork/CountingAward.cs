@@ -11,25 +11,18 @@ namespace FinalWork
 {
     public partial class CountingAward : Form
     {
-        DBManagement DBM;
-        Options Op;
+        public DBManagement DBM { get; set; }
+        public Options Op { get; set; }
+        public ImportStaff IS { get; set; }
+        public ImportWorkTime IWT { get; set; }
 
         public CountingAward()
         {
             InitializeComponent();
             DBM = new DBManagement();
             Op = new Options("settings.fw");
-        }
-
-        private void ImportStaff_Click(object sender, EventArgs e)
-        {
-            ImportStaff IS = new ImportStaff();
-
-            DataTable data = new DataTable();
-
-            data = IS.DataProcessing(DBM);
-
-            tempGrid.DataSource = data;
+            IS = new ImportStaff();
+            IWT = new ImportWorkTime();
         }
 
         private void BlankStrip_Click(object sender, EventArgs e)
@@ -40,7 +33,7 @@ namespace FinalWork
         }
         private void SettingStrip_Click(object sender, EventArgs e)
         {
-            Form S = new Settings(this, Op);
+            Form S = new Settings(this);
             S.Visible = true;
             this.Enabled = false;
         }

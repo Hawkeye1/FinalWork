@@ -72,7 +72,9 @@
       <DependentUpon>CountingAward.cs</DependentUpon>
     </Compile>
     <Compile Include="DBManagement.cs" />
+    <Compile Include="Import.cs" />
     <Compile Include="ImportStaff.cs" />
+    <Compile Include="ImportWorkTime.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

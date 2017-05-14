@@ -11,11 +11,10 @@ namespace FinalWork
 {
     public partial class Settings : Form
     {
-        public Form Main { get; private set; }
-        public Boolean change { get; private set; }
-        public Options Op { get; private set; }
+        public CountingAward Main { get;  set; }
+        public Boolean change { get;  set; }
 
-        public Settings(Form f, Options o)
+        public Settings(CountingAward f)
         {
             InitializeComponent();
             this.FormClosed += new FormClosedEventHandler(Settings_Closed);
@@ -23,10 +22,9 @@ namespace FinalWork
             this.timeUpDown.ValueChanged += UpDown_ValueChanged;
             this.saveCheckBox.CheckedChanged += SaveCheckBox_CheckedChanged;
             Main = f;
-            Op = o;
-            accuracyUpDown.Value = Op.Accuracy;
-            timeUpDown.Value = Op.Period;
-            saveCheckBox.Checked = Op.SaveCopy;
+            accuracyUpDown.Value = Main.Op.Accuracy;
+            timeUpDown.Value = Main.Op.Period;
+            saveCheckBox.Checked = Main.Op.SaveCopy;
             change = false;
         }
 
@@ -66,12 +64,12 @@ namespace FinalWork
         {
             if (change == true)
             {
-                Op.Accuracy = Convert.ToInt32(accuracyUpDown.Value);
-                Op.Period = Convert.ToInt32(timeUpDown.Value);
-                Op.SaveCopy = saveCheckBox.Checked;
-                Op.SaveChange();
+               Main.Op.Accuracy = Convert.ToInt32(accuracyUpDown.Value);
+               Main.Op.Period = Convert.ToInt32(timeUpDown.Value);
+               Main.Op.SaveCopy = saveCheckBox.Checked;
+               Main.Op.SaveChange();
 
-                change = false;
+               change = false;
             }
         }
     }

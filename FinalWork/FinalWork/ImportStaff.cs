@@ -9,71 +9,46 @@ namespace FinalWork
 {
     //Класс для обработки информации о списке сотрудникв кафедры
     //Дописать сравнение списка с списком базы
-    class ImportStaff
+    public class ImportStaff : Import 
     {
-        private Stream file;
-        int fileType;
+        public int Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
 
-        private void OpenFile()
+        public DataTable DataProcessing(DBManagement DBM, DataTable temp)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = "c:\\";
-            ofd.Filter = "xls files (*.xls)|*.xls|xlsx files (*.xlsx)|*.xlsx";
-            ofd.FilterIndex = 1;
-            ofd.RestoreDirectory = true;
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    if ((file = ofd.OpenFile()) != null)
-                    {
-                        fileType = ofd.FilterIndex;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-        public DataSet LoadData()
-        {
-            IExcelDataReader excelData;
-
-            OpenFile();
-
-            if (fileType == 2)                       // xlsx
-            {
-                excelData = ExcelReaderFactory.CreateOpenXmlReader(file);
-            }
-            else
-            {                                        // xls
-                excelData = ExcelReaderFactory.CreateBinaryReader(file);
-            }
-
-            DataSet data = excelData.AsDataSet();
-            excelData.Dispose();
-
-            return data;
-        }
-        public DataTable DataProcessing(DBManagement DBM)
-        {
-            DataTable temp = new DataTable();
             DataTable staffTable = new DataTable();
-            DataTable positions = DBM.GetPosition();
-            char delimer = ' ';                                     // Разделитель
+            DataTable positions = DBM.GetPositions();
+            char[] delimer = { ' ', '\n' };                                     // Разделитель
+            Boolean match = false;
+            Employment = 1;
 
-            temp = LoadData().Tables[1];
             staffTable.Columns.Add("ФИО");
 
             for (int i = 0; i < temp.Rows.Count; i++)
             {
-                String[] Substring = temp.Rows[i][0].ToString().Split(delimer);
+                String[] substring = temp.Rows[i][0].ToString().Split(delimer);
 
-                if (Substring[0].Equals("ФИО") || Substring[0].Equals("Кафедра") || Substring[0].Equals("Табель") ||
-                    Substring[0].Equals("кафедра") || Substring[0].Equals("Руководитель") || Substring[0].Equals("Ответственный") ||
-                    Substring[0].Equals("") || Substring[0].Equals("Приложение"))
+                // блок анализа документа на штатность сотрудников в списке
+                if (!match)
+                {
+                    foreach (var str in substring)
+                    {
+                        if (str.Equals("совместителей"))
+                        {
+                            match = true;
+                            Employment = 0;
+                        }
+                        else if (str.Equals("ФИО"))
+                        {
+                            match = true;
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (substring[0].Equals("ФИО") || substring[0].Equals("Кафедра") || substring[0].Equals("Табель") ||
+                    substring[0].Equals("кафедра") || substring[0].Equals("Руководитель") || substring[0].Equals("Ответственный") ||
+                    substring[0].Equals("") || substring[0].Equals("Приложение"))
                 {
                     continue;
                 }
