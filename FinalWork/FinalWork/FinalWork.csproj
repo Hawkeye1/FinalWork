@@ -59,36 +59,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AwardBlank.cs">
+    <Compile Include="AddUserWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AwardBlank.Designer.cs">
-      <DependentUpon>AwardBlank.cs</DependentUpon>
+    <Compile Include="AddUserWindow.Designer.cs">
+      <DependentUpon>AddUserWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="CountingAward.cs">
+    <Compile Include="PremiumBlankWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CountingAward.Designer.cs">
-      <DependentUpon>CountingAward.cs</DependentUpon>
+    <Compile Include="PremiumBlankWindow.Designer.cs">
+      <DependentUpon>PremiumBlankWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="DBManagement.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="ImportStaff.cs" />
     <Compile Include="ImportWorkTime.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs">
+    <Compile Include="SettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <Compile Include="SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AwardBlank.resx">
-      <DependentUpon>AwardBlank.cs</DependentUpon>
+    <EmbeddedResource Include="AddUserWindow.resx">
+      <DependentUpon>AddUserWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CountingAward.resx">
-      <DependentUpon>CountingAward.cs</DependentUpon>
+    <EmbeddedResource Include="PremiumBlankWindow.resx">
+      <DependentUpon>PremiumBlankWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -99,8 +108,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <EmbeddedResource Include="SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />

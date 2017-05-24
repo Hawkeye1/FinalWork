@@ -14,24 +14,30 @@ namespace FinalWork
         public DataTable CountingWorkTime(DBManagement DBM, DataTable temp)
         {
             DataTable positions = DBM.GetPositions();
+            DataTable e = DBM.GetEmployment();
             char[] delimer = { ' ', '\n', ':' };                                     // Разделитель
             DataTable staffTable = new DataTable();
             staffTable.Columns.Add("ФИО");
             staffTable.Columns.Add("Должность");
             staffTable.Columns.Add("Ставка");
             staffTable.Columns[2].DataType = Type.GetType("System.Double");
-            staffTable.Columns.Add("Рабочее время");
-            staffTable.Columns[3].DataType = Type.GetType("System.Double");
-            staffTable.Columns.Add("Выходные дни");
-            staffTable.Columns[4].DataType = Type.GetType("System.Int32");
-            staffTable.Columns.Add("Дней в командировке");
+            staffTable.Columns.Add("Штатность");
+            staffTable.Columns.Add("Часов работы");
+            staffTable.Columns[4].DataType = Type.GetType("System.Double");
+            staffTable.Columns.Add("Выходных дней");
             staffTable.Columns[5].DataType = Type.GetType("System.Int32");
-            staffTable.Columns.Add("Дней на больничном");
+            staffTable.Columns.Add("Дней в командировке");
             staffTable.Columns[6].DataType = Type.GetType("System.Int32");
+            staffTable.Columns.Add("Дней на больничном");
+            staffTable.Columns[7].DataType = Type.GetType("System.Int32");
+            staffTable.Columns.Add("Тар.коэфф");
+            staffTable.Columns[8].DataType = Type.GetType("System.Double");
+            
 
             int daysOff = 0, sickDays = 0, tripDays = 0;
             double workTime = 0, conv = 0;
             Boolean match = false;
+            Employment = 1;
 
             for (int i = 0; i < temp.Rows.Count; i++)
             {
@@ -100,7 +106,7 @@ namespace FinalWork
 
                             }
 
-                            staffTable.Rows.Add(temp.Rows[i][0], temp.Rows[i][1], temp.Rows[i][2], workTime, daysOff, tripDays, sickDays);
+                            staffTable.Rows.Add(temp.Rows[i][0], temp.Rows[i][1], temp.Rows[i][2], e.Rows[Employment][1] ,workTime, daysOff, tripDays, sickDays, positions.Rows[j][2]);
 
                             workTime = 0;
                             daysOff = 0;

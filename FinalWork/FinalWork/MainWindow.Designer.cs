@@ -1,6 +1,6 @@
 ﻿namespace FinalWork
 {
-    partial class CountingAward
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -75,7 +75,7 @@
             this.tempGrid.Size = new System.Drawing.Size(500, 300);
             this.tempGrid.TabIndex = 1;
             // 
-            // CountingAward
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -84,9 +84,9 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(800, 600);
-            this.Name = "CountingAward";
+            this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CountingAward";
+            this.Text = "Расчёт премий";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempGrid)).EndInit();

@@ -7,8 +7,6 @@ using ICSharpCode.SharpZipLib;
 
 namespace FinalWork
 {
-    //Класс для обработки информации о списке сотрудникв кафедры
-    //Дописать сравнение списка с списком базы
     public class ImportStaff : Import 
     {
         public int Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
@@ -17,7 +15,7 @@ namespace FinalWork
         {
             DataTable staffTable = new DataTable();
             DataTable positions = DBM.GetPositions();
-            char[] delimer = { ' ', '\n' };                                     // Разделитель
+            char[] delimer = { ' ', '\n' };                                             // Разделитель
             Boolean match = false;
             Employment = 1;
 

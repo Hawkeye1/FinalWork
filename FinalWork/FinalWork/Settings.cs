@@ -1,75 +1,102 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FinalWork
 {
-    public partial class Settings : Form
+    [SerializableAttribute]
+    public class Settings
     {
-        public CountingAward Main { get;  set; }
-        public Boolean change { get;  set; }
-
-        public Settings(CountingAward f)
+        public Int32 Accuracy { get; set; }
+        Int32 period;
+        public Int32 Period
         {
-            InitializeComponent();
-            this.FormClosed += new FormClosedEventHandler(Settings_Closed);
-            this.accuracyUpDown.ValueChanged += UpDown_ValueChanged;
-            this.timeUpDown.ValueChanged += UpDown_ValueChanged;
-            this.saveCheckBox.CheckedChanged += SaveCheckBox_CheckedChanged;
-            Main = f;
-            accuracyUpDown.Value = Main.Op.Accuracy;
-            timeUpDown.Value = Main.Op.Period;
-            saveCheckBox.Checked = Main.Op.SaveCopy;
-            change = false;
-        }
-
-        private void SaveCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (change == false)
+            get
             {
-                change = true;
+                return period;
             }
-        }
-        private void Settings_Closed(object sender, EventArgs e)
-        {
-            Main.Enabled = true;
-        }
-        private void UpDown_ValueChanged(object sender, EventArgs e)
-        {
-            if (change == false)
+            set
             {
-                change = true;
-            }
-        }
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            if (change)
-            {
-                if (MessageBox.Show("Изменения не будут сохранены", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (value > 0)
                 {
-                    this.Close();
+                    period = value;
                 }
             }
-            else
+        }
+        public Boolean SaveCopy { get; set; }
+        // 0 - часы работы, 1 - выходные дни, 2 - дней в командировке, 3 - дней на больничном
+        // 4 - тар. коэфф., 5 - ставка, 6 - (К) 
+        public Boolean[] ColumnsVisible { get; set; } 
+        public String FilePath { get; set; }
+
+        public Settings()
+        {
+            Accuracy = 2;
+            Period = 6;
+            SaveCopy = true;
+            FilePath = "settings.fw";
+            ColumnsVisible = new Boolean[7];
+
+            for (int i = 0; i < 7; i++)
             {
-                this.Close();
+                ColumnsVisible[i] = true;
             }
         }
-        private void okButton_Click(object sender, EventArgs e)
+        public Settings(string s)
         {
-            if (change == true)
+            // Инициализация данных из файла
+            // Если файл отсутствует то создаем его
+            // и инициализируем значениями по умолчанию
+            if (!File.Exists(s))                                                           
             {
-               Main.Op.Accuracy = Convert.ToInt32(accuracyUpDown.Value);
-               Main.Op.Period = Convert.ToInt32(timeUpDown.Value);
-               Main.Op.SaveCopy = saveCheckBox.Checked;
-               Main.Op.SaveChange();
+                using (FileStream fs = File.Create(s))                                     
+                {
+                    Settings o = new Settings();
 
-               change = false;
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(fs, o);
+
+                    Accuracy = o.Accuracy;
+                    Period = o.Period;
+                    SaveCopy = o.SaveCopy;
+                    FilePath = s;
+                    ColumnsVisible = new Boolean[7];
+                    for (int i = 0; i < 7; i++)
+                    {
+                        ColumnsVisible[i] = o.ColumnsVisible[i];
+                    }
+                }
+            }
+            else                                                                            
+            {
+                using (FileStream fs = File.OpenRead(s))
+                {
+                    Settings o = null;
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    o = (Settings)binaryFormatter.Deserialize(fs);
+
+                    Accuracy = o.Accuracy;
+                    Period = o.Period;
+                    SaveCopy = o.SaveCopy;
+                    FilePath = o.FilePath;
+                    ColumnsVisible = new Boolean[7];
+                    for (int i = 0; i < 7; i++)
+                    {
+                        ColumnsVisible[i] = o.ColumnsVisible[i];
+                    }
+                }
+            }
+        }
+        public void SaveChange()
+        {
+            using (FileStream fs = File.Create(FilePath))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fs, this);
             }
         }
     }

@@ -15,7 +15,7 @@ namespace FinalWork
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CountingAward());
+            Application.Run(new MainWindow());
         }
     }
 }
