@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -42,6 +43,7 @@ namespace FinalWork
             blankDataGridView.DataSourceChanged += BlankDataGridView_DataSourceChanged;
             blankDataGridView.Sorted += BlankDataGridView_Sorted;
             blankDataGridView.CellEndEdit += BlankDataGridView_CellEndEdit;
+            blankDataGridView.DataError += BlankDataGridView_DataError;
             blankDataGridView.AutoResizeColumns();
             blankDataGridView.AutoResizeRows();
             //
@@ -56,11 +58,17 @@ namespace FinalWork
             leftAutoFundTextBox.TextChanged += LeftAutoFundTextBox_TextChanged;
         }
 
+        private void BlankDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Неверный тип данных!\n Ожидаемый тип: " + blankDataGridView.CurrentCell.ValueType.ToString(), "Error", 
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         private void BlankDataGridView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
-                blankDataGridView.ClearSelection();
+                blankDataGridView.CurrentRow.Selected = false;
             }
         }
 
@@ -163,8 +171,8 @@ namespace FinalWork
                     blankDataGridView.Rows[i].Cells[13].Value =
                         Math.Round(BYNperK * (Double)blankDataGridView.Rows[i].Cells[11].Value, Main.Op.Accuracy - 2, MidpointRounding.AwayFromZero);
                     blankDataGridView.Rows[i].Cells[15].Value = Math.Round(Convert.ToDouble(blankDataGridView.Rows[i].Cells[12].Value) +
-                        Convert.ToDouble(blankDataGridView.Rows[i].Cells[13].Value) + 
-                        Convert.ToDouble(blankDataGridView.Rows[i].Cells[14].Value), Main.Op.Accuracy, MidpointRounding.AwayFromZero);
+                        Convert.ToDouble(blankDataGridView.Rows[i].Cells[13].Value) + Convert.ToDouble(blankDataGridView.Rows[i].Cells[14].Value), 
+                        Main.Op.Accuracy, MidpointRounding.AwayFromZero);
 
                     issudeByHand += Convert.ToDouble(blankDataGridView.Rows[i].Cells[12].Value);
                     issuedAuto += Convert.ToDouble(blankDataGridView.Rows[i].Cells[13].Value);
@@ -189,7 +197,7 @@ namespace FinalWork
                 }
                 else
                 {
-                    num = Math.Round(num, Main.Op.Accuracy);
+                    num = Math.Round(num, Main.Op.Accuracy, MidpointRounding.AwayFromZero);
                     tb.Text = num.ToString();
 
                     if (Convert.ToDouble(totalFundTextBox.Text) < Convert.ToDouble(autoFundTextBox.Text))
@@ -217,7 +225,7 @@ namespace FinalWork
                 }
                 else
                 {
-                    num = Math.Round(num, Main.Op.Accuracy);
+                    num = Math.Round(num, Main.Op.Accuracy, MidpointRounding.AwayFromZero);
                     tb.Text = num.ToString();
 
                     if (Convert.ToDouble(totalFundTextBox.Text) < Convert.ToDouble(autoFundTextBox.Text))
@@ -227,6 +235,7 @@ namespace FinalWork
                     }
 
                     byHandFundTextBox.Text = (Convert.ToDouble(totalFundTextBox.Text) - Convert.ToDouble(autoFundTextBox.Text)).ToString();
+                    PremiumsAutoCount();
                 }
             }
         }
@@ -344,6 +353,7 @@ namespace FinalWork
                 DataTable table = (DataTable)blankDataGridView.DataSource;
                 DataRow row = table.Rows[blankDataGridView.CurrentRow.Index];
                 Main.DBM.AddMember(row);
+                blankDataGridView.CurrentRow.DefaultCellStyle.BackColor = Color.Empty;
                 CheckMembersInDB(blankDataGridView);
             }
         }
@@ -608,7 +618,7 @@ namespace FinalWork
         {
             if (Step != (FORMCOUNT - 1))
             {
-                Blanks[Step] = (DataTable)blankDataGridView.DataSource;
+                Blanks[Step] = blankDataGridView.DataSource as DataTable;
                 TotalFund[Step] = Convert.ToDouble(totalFundTextBox.Text);
                 AutoFund[Step] = Convert.ToDouble(autoFundTextBox.Text);
                 Step++;
@@ -635,12 +645,32 @@ namespace FinalWork
                     {
                         if (Blanks[0].Rows.Count != 0 || Blanks[1].Rows.Count != 0 || Blanks[2].Rows.Count != 0)
                         {
+                            TotalFund[2] = Convert.ToDouble(totalFundTextBox.Text);
+                            Blanks[2] = blankDataGridView.DataSource as DataTable;
+
                             Main.DBM.AddRecords(Blanks, FORMCOUNT);
                             Main.DBM.AddPremiums(TotalFund);
-                            
+                            Main.DBM.AddArchive();
+
+                            SaveFileDialog SFD = new SaveFileDialog();
+                            SFD.Filter = "odt file (*.odt)|*.odt|html file (*.html)|*.html|pdf file (*.pdf)|*.pdf";
+                            SFD.InitialDirectory = Directory.GetCurrentDirectory();
+                            SFD.SupportMultiDottedExtensions = false;
+                            SFD.FilterIndex = 1;
+
+                            if (SFD.ShowDialog() == DialogResult.OK)
+                            {
+                                if (SFD.FilterIndex != 3)
+                                {
+                                    Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Временно не доступно", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
                         }
 
-                        Main.DBM.AddArchive();
                         this.Close();
                     }
                 }

@@ -297,5 +297,23 @@ namespace FinalWork
                 trans.Commit();
             }
         }
+
+        public DataTable GetStaffPluralists()
+        {
+            DataSet membersData = new DataSet();
+            membersData.Reset();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                String command = "select m.initials, \"штатный\" from staff s join members m on s.member_id = m.member_id" +
+                     " union select m.initials, \"совместитель\" from pluralists p join members m on p.member_id = m.member_id;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                adapter.Fill(membersData);
+            }
+
+            return membersData.Tables[0];
+        }
     }
 }
