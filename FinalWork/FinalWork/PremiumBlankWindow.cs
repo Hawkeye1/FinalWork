@@ -12,28 +12,58 @@ namespace FinalWork
 {
     public partial class PremiumBlankWindow : Form
     {
-        const int FORMCOUNT = 3;                                        // Кол-во форм премий
+        const Int32 FORMCOUNT = 3;                                        // Кол-во форм премий
 
         public MainWindow Main { get; set; }
-        public int Step { get; set; }
+        public Int32 Step { get; set; }
         public DataTable[] Blanks { get; set; }
         public Double[] TotalFund { get; set; }
         public Double[] AutoFund { get; set; }
         public Boolean[] Duplicated { get; set; }
-        public Boolean[] NoRecordnDB { get; set; }
+        public Boolean[] NoRecordInDB { get; set; }
         public Boolean[] BalanceAuto { get; set; }
         public Boolean[] BalanceByHand { get; set; }
         public DataGridView BlankDataGridView
         {
             get { return blankDataGridView; }
         }
+        public TextBox AutoFundTextBox
+        {
+            get
+            {
+                return autoFundTextBox;
+            }
+        }
+        public TextBox ByHandFundTextBox
+        {
+            get
+            {
+                return byHandFundTextBox;
+            }
+        }
+        public TextBox LeftAutoFundTextBox
+        {
+            get
+            {
+                return leftAutoFundTextBox;
+            }
+        }
+        public TextBox LeftByHandFundTextBox
+        {
+            get
+            {
+                return leftByHandFundTextBox;
+            }
+        }
+        public PremiumCalculation PC { get; set; }
         
         public PremiumBlankWindow(MainWindow f)
         {
             InitializeComponent();
-            this.FormClosed += new FormClosedEventHandler(AwardBlank_Closed);
+            this.FormClosed += new FormClosedEventHandler(PremiumBlank_Closed);
             Main = f;
             Step = 0;
+            PC = new PremiumCalculation();
             //
             // DataGridView - Initialize
             InitBlanks();
@@ -44,6 +74,7 @@ namespace FinalWork
             blankDataGridView.Sorted += BlankDataGridView_Sorted;
             blankDataGridView.CellEndEdit += BlankDataGridView_CellEndEdit;
             blankDataGridView.DataError += BlankDataGridView_DataError;
+            blankDataGridView.SelectionChanged += BlankDataGridView_SelectionChanged;
             blankDataGridView.AutoResizeColumns();
             blankDataGridView.AutoResizeRows();
             //
@@ -56,6 +87,23 @@ namespace FinalWork
             autoFundTextBox.Leave += AutoFundTextBox_Leave;
             leftByHandFundTextBox.TextChanged += LeftByHandFundTextBox_TextChanged;
             leftAutoFundTextBox.TextChanged += LeftAutoFundTextBox_TextChanged;
+        }
+
+        private void BlankDataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (blankDataGridView.CurrentRow != null)
+            {
+                if (blankDataGridView.CurrentRow.DefaultCellStyle.BackColor == Color.Empty)
+                {
+                    blankDataGridView.DefaultCellStyle.SelectionBackColor = Color.Wheat;
+                    blankDataGridView.DefaultCellStyle.SelectionForeColor = Color.DarkBlue;
+                }
+                else
+                {
+                    blankDataGridView.DefaultCellStyle.SelectionBackColor = blankDataGridView.CurrentRow.DefaultCellStyle.BackColor;
+                    blankDataGridView.DefaultCellStyle.SelectionForeColor = Color.White;
+                }
+            }
         }
 
         private void BlankDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -110,6 +158,7 @@ namespace FinalWork
         {
             blankDataGridView.MultiSelect = false;
             blankDataGridView.RowHeadersVisible = false;
+            blankDataGridView.DefaultCellStyle.SelectionForeColor = Color.DarkBlue;
 
             blankDataGridView.Columns[0].ReadOnly = true;
             blankDataGridView.Columns[1].ReadOnly = true;
@@ -135,58 +184,35 @@ namespace FinalWork
 
         private void BlankDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            PremiumsAutoCount();
+            if (blankDataGridView.CurrentCell.ColumnIndex != 16)
+            {
+                if(blankDataGridView.CurrentCell.Value.ToString() == "")
+                {
+                    if (blankDataGridView.CurrentCell.ColumnIndex != 12 && blankDataGridView.CurrentCell.ColumnIndex != 14)
+                    {
+                        blankDataGridView.CurrentCell.Value = Convert.ToDouble(1.0);
+                    }
+                    else
+                    {
+                        blankDataGridView.CurrentCell.Value = Convert.ToDouble(0.0);
+                    }
+                }
+
+                PC.Calculation(this);
+            }
         }
 
         private void BlankDataGridView_Sorted(object sender, EventArgs e)
         {
+            blankDataGridView.AutoResizeColumns();
+            blankDataGridView.AutoResizeRows();
             CheckMembersInDB((DataGridView)sender);
             MarkMembers();
         }
 
-        public void PremiumsAutoCount()
-        {
-            Double k = 0;
-            Double BYNperK = 0;
-            Double issuedAuto = 0;
-            Double issudeByHand = 0;
-            Double correction = 0;
-
-            for (int i = 0; i < blankDataGridView.Rows.Count; i++)
-            {
-                // пересчет - К для каждого сотрудника в списке
-                blankDataGridView.Rows[i].Cells[11].Value = Math.Round(Convert.ToDouble(blankDataGridView.Rows[i].Cells[10].Value) *
-                    Convert.ToDouble(blankDataGridView.Rows[i].Cells[9].Value) * Convert.ToDouble(blankDataGridView.Rows[i].Cells[8].Value) *
-                    Convert.ToDouble(blankDataGridView.Rows[i].Cells[7].Value), 2, MidpointRounding.AwayFromZero);
-
-                k += Convert.ToDouble(blankDataGridView.Rows[i].Cells[11].Value);
-            }
-
-            if (k != 0)
-            {
-                BYNperK = Convert.ToDouble(autoFundTextBox.Text) / k;
-
-                for (int i = 0; i < blankDataGridView.Rows.Count; i++)
-                {
-                    blankDataGridView.Rows[i].Cells[13].Value =
-                        Math.Round(BYNperK * (Double)blankDataGridView.Rows[i].Cells[11].Value, Main.Op.Accuracy - 2, MidpointRounding.AwayFromZero);
-                    blankDataGridView.Rows[i].Cells[15].Value = Math.Round(Convert.ToDouble(blankDataGridView.Rows[i].Cells[12].Value) +
-                        Convert.ToDouble(blankDataGridView.Rows[i].Cells[13].Value) + Convert.ToDouble(blankDataGridView.Rows[i].Cells[14].Value), 
-                        Main.Op.Accuracy, MidpointRounding.AwayFromZero);
-
-                    issudeByHand += Convert.ToDouble(blankDataGridView.Rows[i].Cells[12].Value);
-                    issuedAuto += Convert.ToDouble(blankDataGridView.Rows[i].Cells[13].Value);
-                    correction += Convert.ToDouble(blankDataGridView.Rows[i].Cells[14].Value);
-                }
-
-                leftByHandFundTextBox.Text = Math.Round((Convert.ToDouble(byHandFundTextBox.Text) - issudeByHand), Main.Op.Accuracy, MidpointRounding.AwayFromZero).ToString();
-                leftAutoFundTextBox.Text = Math.Round((Convert.ToDouble(autoFundTextBox.Text) - issuedAuto - correction), Main.Op.Accuracy, MidpointRounding.AwayFromZero).ToString();
-            }
-        }
-
         private void AutoFundTextBox_Leave(object sender, EventArgs e)
         {
-            double num;
+            Double num;
             TextBox tb = (TextBox)sender;
 
             if (tb.Text != "")
@@ -207,14 +233,14 @@ namespace FinalWork
                     }
 
                     byHandFundTextBox.Text = (Convert.ToDouble(totalFundTextBox.Text) - Convert.ToDouble(autoFundTextBox.Text)).ToString();
-                    PremiumsAutoCount();
+                    PC.Calculation(this);
                 }
             }
         }
 
         private void TotalFundTextBox_Leave(object sender, EventArgs e)
         {
-            double num;
+            Double num;
             TextBox tb = (TextBox)sender;
 
             if (tb.Text != "")
@@ -235,7 +261,7 @@ namespace FinalWork
                     }
 
                     byHandFundTextBox.Text = (Convert.ToDouble(totalFundTextBox.Text) - Convert.ToDouble(autoFundTextBox.Text)).ToString();
-                    PremiumsAutoCount();
+                    PC.Calculation(this);
                 }
             }
         }
@@ -260,7 +286,7 @@ namespace FinalWork
             TotalFund = new Double[FORMCOUNT];
             AutoFund = new Double[FORMCOUNT];
             Duplicated = new Boolean[FORMCOUNT];
-            NoRecordnDB = new Boolean[FORMCOUNT];
+            NoRecordInDB = new Boolean[FORMCOUNT];
             BalanceAuto = new Boolean[FORMCOUNT];
             BalanceByHand = new Boolean[FORMCOUNT];
 
@@ -329,10 +355,11 @@ namespace FinalWork
             return table;
         }
 
-        private void AwardBlank_Closed(object sender, EventArgs e)
+        private void PremiumBlank_Closed(object sender, EventArgs e)
         {
             Main.Enabled = true;
             Main.Show();
+            Main.AddInTable();
         }
 
         private void AddMembersStrip_Click(object sender, EventArgs e)
@@ -353,8 +380,9 @@ namespace FinalWork
                 DataTable table = (DataTable)blankDataGridView.DataSource;
                 DataRow row = table.Rows[blankDataGridView.CurrentRow.Index];
                 Main.DBM.AddMember(row);
-                blankDataGridView.CurrentRow.DefaultCellStyle.BackColor = Color.Empty;
                 CheckMembersInDB(blankDataGridView);
+                MarkMembers();
+                blankDataGridView.CurrentRow.Selected = false;
             }
         }
 
@@ -364,7 +392,7 @@ namespace FinalWork
             DataTable staff = Main.DBM.GetStaff();
             DataTable pluralists = Main.DBM.GetPluralists();
             Boolean match;
-            NoRecordnDB[Step] = false;
+            NoRecordInDB[Step] = false;
 
             for (int i = 0; i < DGV.Rows.Count; i++)
             {
@@ -374,7 +402,8 @@ namespace FinalWork
                 {
                     if (member[1].ToString().Equals(DGV.Rows[i].Cells[0].Value))
                     {
-                        DGV.Rows[i].Cells[8].Value = Convert.ToDouble(member[2].ToString());
+                        DGV.Rows[i].Cells[8].Value = (Convert.ToDouble(DGV.Rows[i].Cells[8].Value) == 1.0) ? 
+                            Convert.ToDouble(member[2].ToString()) : DGV.Rows[i].Cells[8].Value;
 
                         if (DGV.Rows[i].Cells[2].Value.Equals("штатный"))
                         {
@@ -406,7 +435,11 @@ namespace FinalWork
                 if (!match)
                 {
                     DGV.Rows[i].DefaultCellStyle.BackColor = Color.OrangeRed;
-                    NoRecordnDB[Step] = true;
+                    NoRecordInDB[Step] = true;
+                }
+                else if (DGV.Rows[i].DefaultCellStyle.BackColor == Color.OrangeRed)
+                {
+                    DGV.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
                 }
             }
         }
@@ -419,28 +452,28 @@ namespace FinalWork
             {
                 if (blankDataGridView.Rows[i].DefaultCellStyle.BackColor != Color.OrangeRed)
                 {
-                    if (blankDataGridView.Rows[i].DefaultCellStyle.BackColor != Color.Cyan)
+                    if (blankDataGridView.Rows[i].DefaultCellStyle.BackColor != Color.CornflowerBlue)
                     {
                         if (Convert.ToInt32(blankDataGridView.Rows[i].Cells[5].Value) != 0 && 
                             Convert.ToInt32(blankDataGridView.Rows[i].Cells[6].Value) != 0)
                         {
-                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.YellowGreen;
+                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Green;
                         }
                         else if (Convert.ToInt32(blankDataGridView.Rows[i].Cells[5].Value) != 0)
                         {
-                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
+                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.DarkOrange;
                         }
                         else if (Convert.ToInt32(blankDataGridView.Rows[i].Cells[6].Value) != 0)
                         {
-                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.MediumVioletRed;
+                            blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.MediumOrchid;
                         }
 
                         for (int j = i + 1; j < blankDataGridView.Rows.Count; j++)
                         {
                             if (blankDataGridView.Rows[i].Cells[0].Value.Equals(blankDataGridView.Rows[j].Cells[0].Value))
                             {
-                                blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Cyan;
-                                blankDataGridView.Rows[j].DefaultCellStyle.BackColor = Color.Cyan;
+                                blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.CornflowerBlue;
+                                blankDataGridView.Rows[j].DefaultCellStyle.BackColor = Color.CornflowerBlue;
                                 Duplicated[Step] = true;
                                 break;
                             }
@@ -462,7 +495,7 @@ namespace FinalWork
             blankDataGridView.ClearSelection();
             CheckMembersInDB(blankDataGridView);
             MarkMembers();
-            PremiumsAutoCount();
+            PC.Calculation(this);
         }
 
         public void AddInForm(DataTable temp, DataGridView DGV)
@@ -489,18 +522,18 @@ namespace FinalWork
                 // проверка есть ли данный человек в DataGridView
                 foreach (DataRow source in table.Rows)
                 {
-                    if (source[0].Equals(row[0]) && source[2].Equals(row[2]))
+                    if (source[0].Equals(row[0]) && source[2].Equals(row[3]))
                     {
                         match = true;
                         break;
                     }
                 }
                 // проверка есть ли есть данный человек в других формах
-                if (!match)
+                if (!match && Step != 2)
                 {
                     foreach (DataRow source in Blanks[formId1].Rows)
                     {
-                        if (source[0].Equals(row[0]) && source[2].Equals(row[2]))
+                        if (source[0].Equals(row[0]) && source[2].Equals(row[3]))
                         {
                             match = true;
                             break;
@@ -508,11 +541,11 @@ namespace FinalWork
                     }
                 }
 
-                if (!match)
+                if (!match && Step != 2)
                 {
                     foreach (DataRow source in Blanks[formId2].Rows)
                     {
-                        if (source[0].Equals(row[0]) && source[2].Equals(row[2]))
+                        if (source[0].Equals(row[0]) && source[2].Equals(row[3]))
                         {
                             match = true;
                             break;
@@ -547,7 +580,7 @@ namespace FinalWork
 
         private void AddInFormStrip_Click(object sender, EventArgs e)
         {
-            AddUserWindow AUW = new AddUserWindow(this);
+            AddPersonWindow AUW = new AddPersonWindow(this);
             AUW.Visible = true;
             this.Enabled = false;
         }
@@ -559,7 +592,7 @@ namespace FinalWork
             {
                 if (blankDataGridView.Rows.GetFirstRow(DataGridViewElementStates.Selected) > -1)
                 {
-                    if (blankDataGridView.CurrentRow.DefaultCellStyle.BackColor == Color.Cyan)
+                    if (blankDataGridView.CurrentRow.DefaultCellStyle.BackColor == Color.CornflowerBlue)
                     {
                         for (int i = 0; i < blankDataGridView.Rows.Count; i++)
                         {
@@ -571,8 +604,9 @@ namespace FinalWork
                         }
                     }
 
-                    blankDataGridView.Rows.RemoveAt(blankDataGridView.CurrentRow.Index);
-                    PremiumsAutoCount();
+
+                    Blanks[Step].Rows.Remove(Blanks[Step].Select("ФИО = '" + blankDataGridView.CurrentRow.Cells[0].Value.ToString() + "'")[0]);
+                    PC.Calculation(this);
                 }
             }
         }
@@ -610,7 +644,7 @@ namespace FinalWork
 
             leftByHandFundTextBox.Text = "0";
             leftAutoFundTextBox.Text = "0";
-            PremiumsAutoCount();
+            PC.Calculation(this);
             blankDataGridView.ClearSelection();
         }
 
@@ -623,11 +657,11 @@ namespace FinalWork
                 AutoFund[Step] = Convert.ToDouble(autoFundTextBox.Text);
                 Step++;
                 ChangeStep();
-                PremiumsAutoCount();
+                PC.Calculation(this);
             }
             else
             {
-                if (NoRecordnDB.Contains(true))
+                if (NoRecordInDB.Contains(true))
                 {
                     MessageBox.Show("Не все сотрудники есть в базе!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -686,7 +720,7 @@ namespace FinalWork
                 AutoFund[Step] = Convert.ToDouble(autoFundTextBox.Text);
                 Step--;
                 ChangeStep();
-                PremiumsAutoCount();
+                PC.Calculation(this);
             }
         }
     }

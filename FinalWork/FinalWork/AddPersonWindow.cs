@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace FinalWork
 {
-    public partial class AddUserWindow : Form
+    public partial class AddPersonWindow : Form
     {
         public PremiumBlankWindow PBW { get; set; }
         public DataTable Members { get; set; }
 
-        public AddUserWindow(PremiumBlankWindow temp)
+        public AddPersonWindow(PremiumBlankWindow temp)
         {
             InitializeComponent();
             PBW = temp;
@@ -32,7 +32,11 @@ namespace FinalWork
         {
             DataTable addMembers = Members.Clone();
 
-            foreach (int num in memberСheckedListBox.CheckedIndices)
+            DataView dv = Members.DefaultView;
+            dv.Sort = "[ФИО] ASC";
+            Members = dv.ToTable();
+
+            foreach (Int32 num in memberСheckedListBox.CheckedIndices)
             {
                 addMembers.ImportRow(Members.Rows[num]);
             }
@@ -43,7 +47,7 @@ namespace FinalWork
             PBW.BlankDataGridView.AutoResizeColumns();
             PBW.BlankDataGridView.AutoResizeRows();
             PBW.BlankDataGridView.ClearSelection();
-            PBW.PremiumsAutoCount();
+            PBW.PC.Calculation(PBW);
             this.Close();
         }
 

@@ -109,7 +109,7 @@ namespace FinalWork
                 cmd.Parameters.AddWithValue("@experience", Convert.ToDouble(row[8].ToString()));
                 cmd.ExecuteNonQuery();
 
-                int member_id = 0;
+                Int32 member_id = 0;
                 cmd.Reset();
                 cmd.CommandText = "SELECT member_id FROM members WHERE initials = @initials;";
                 cmd.Parameters.AddWithValue("@initials", row[0].ToString());
@@ -134,7 +134,7 @@ namespace FinalWork
             }
         }
 
-        public void AddMembers(DataTable temp, int employment)
+        public void AddMembers(DataTable temp, Int32 employment)
         {
             using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
             {
@@ -149,7 +149,7 @@ namespace FinalWork
                     cmd.Parameters.AddWithValue("@experience", 1.0);
                     cmd.ExecuteNonQuery();
 
-                    int member_id = 0;
+                    Int32 member_id = 0;
                     cmd.Reset();
                     cmd.CommandText = "SELECT member_id FROM members WHERE initials = @initials;";
                     cmd.Parameters.AddWithValue("@initials", row[0].ToString());
@@ -175,7 +175,7 @@ namespace FinalWork
             }
         }
 
-        public void AddRecords(DataTable[] blanks, int numBlanks)
+        public void AddRecords(DataTable[] blanks, Int32 numBlanks)
         {
             DataTable members = GetMembers();
             DataTable positions = GetPositions();
@@ -184,16 +184,16 @@ namespace FinalWork
             {
                 conn.Open();
                 var trans = conn.BeginTransaction();
-                int report_id = 0;
-                int member_id = 0;
-                int position_id = 0;
-                int record_id = 0;
-                int employment_id = 0;
+                Int32 report_id = 0;
+                Int32 member_id = 0;
+                Int32 position_id = 0;
+                Int32 record_id = 0;
+                Int32 employment_id = 0;
 
                 SQLiteCommand cmd = new SQLiteCommand(conn);
-                cmd.CommandText = "SELECT ifnull(MAX(report_id), -1) FROM report";
+                cmd.CommandText = "SELECT ifnull(MAX(report_id), 0) FROM report";
                 report_id = Convert.ToInt32(cmd.ExecuteScalar());
-                report_id =  (report_id == - 1) ? 0 : report_id += 1;
+                report_id =  (report_id == 0) ? 1 : report_id += 1;
 
                 for (int i = 0; i < numBlanks; i++)
                 {
@@ -305,6 +305,7 @@ namespace FinalWork
 
             using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
             {
+                conn.Open();
                 String command = "select m.initials, \"штатный\" from staff s join members m on s.member_id = m.member_id" +
                      " union select m.initials, \"совместитель\" from pluralists p join members m on p.member_id = m.member_id;";
 
@@ -314,6 +315,82 @@ namespace FinalWork
             }
 
             return membersData.Tables[0];
+        }
+
+        public DataTable GetPremiumsStatistics(Int32 limit)
+        {
+            DataSet premiumsData = new DataSet();
+            premiumsData.Reset();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select premium_id, budget, paid, paragraph, cast(date as text)" +
+                    " from premiums order by premium_id desc limit @limit";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@limit", limit);
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                adapter.Fill(premiumsData);
+            }
+
+            return premiumsData.Tables[0];
+        }
+
+        public DataTable GetMemeberStatistics(Int32 name, Int32 employment , Int32 limit)
+        {
+            DataSet memberData = new DataSet();
+            memberData.Reset();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select report_id, SUM(premium_total) from report where member_id = @name and " +
+                    "employment_id = @employment order by report_id desc limit @limit;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@employment", employment);
+                cmd.Parameters.AddWithValue("@limit", limit);
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                adapter.Fill(memberData);
+            }
+
+            return memberData.Tables[0];
+        }
+
+        public Int32 GetMemberId(String initials)
+        {
+            Int32 member_id = 0;
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select member_id from members where initials = @initials;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@initials", initials);
+                member_id = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+
+            return member_id;
+        }
+
+        public DateTime GetDate(Int32 archive_id)
+        {
+            DateTime dateIssue = new DateTime();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select cast(date as text) from archive where report_id = @archive_id;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@archive_id", archive_id);
+                dateIssue = Convert.ToDateTime(cmd.ExecuteScalar());
+            }
+
+            return dateIssue;
         }
     }
 }

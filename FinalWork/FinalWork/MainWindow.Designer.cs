@@ -32,6 +32,8 @@
             this.BlankStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.membersDataGridView = new System.Windows.Forms.DataGridView();
+            this.memberZedGraphControl = new ZedGraph.ZedGraphControl();
+            this.premiumZedGraphControl = new ZedGraph.ZedGraphControl();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.membersDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -72,21 +74,42 @@
             this.membersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.membersDataGridView.GridColor = System.Drawing.SystemColors.ControlLightLight;
             this.membersDataGridView.Location = new System.Drawing.Point(13, 28);
-            this.membersDataGridView.MaximumSize = new System.Drawing.Size(300, 300);
-            this.membersDataGridView.MinimumSize = new System.Drawing.Size(300, 300);
+            this.membersDataGridView.MaximumSize = new System.Drawing.Size(300, 521);
+            this.membersDataGridView.MinimumSize = new System.Drawing.Size(300, 521);
             this.membersDataGridView.MultiSelect = false;
             this.membersDataGridView.Name = "membersDataGridView";
             this.membersDataGridView.ReadOnly = true;
             this.membersDataGridView.RowHeadersWidth = 150;
             this.membersDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.membersDataGridView.Size = new System.Drawing.Size(300, 300);
+            this.membersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.membersDataGridView.Size = new System.Drawing.Size(300, 521);
             this.membersDataGridView.TabIndex = 1;
+            // 
+            // memberZedGraphControl
+            // 
+            this.memberZedGraphControl.IsShowPointValues = false;
+            this.memberZedGraphControl.Location = new System.Drawing.Point(320, 28);
+            this.memberZedGraphControl.Name = "memberZedGraphControl";
+            this.memberZedGraphControl.PointValueFormat = "G";
+            this.memberZedGraphControl.Size = new System.Drawing.Size(452, 255);
+            this.memberZedGraphControl.TabIndex = 2;
+            // 
+            // premiumZedGraphControl
+            // 
+            this.premiumZedGraphControl.IsShowPointValues = false;
+            this.premiumZedGraphControl.Location = new System.Drawing.Point(320, 294);
+            this.premiumZedGraphControl.Name = "premiumZedGraphControl";
+            this.premiumZedGraphControl.PointValueFormat = "G";
+            this.premiumZedGraphControl.Size = new System.Drawing.Size(452, 255);
+            this.premiumZedGraphControl.TabIndex = 3;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.premiumZedGraphControl);
+            this.Controls.Add(this.memberZedGraphControl);
             this.Controls.Add(this.membersDataGridView);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -108,6 +131,8 @@
         private System.Windows.Forms.ToolStripMenuItem BlankStrip;
         private System.Windows.Forms.DataGridView membersDataGridView;
         private System.Windows.Forms.ToolStripMenuItem SettingStrip;
+        private ZedGraph.ZedGraphControl memberZedGraphControl;
+        private ZedGraph.ZedGraphControl premiumZedGraphControl;
     }
 }
 

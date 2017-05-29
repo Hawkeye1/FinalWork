@@ -1,6 +1,6 @@
 ﻿namespace FinalWork
 {
-    partial class AddUserWindow
+    partial class AddPersonWindow
     {
         /// <summary>
         /// Required designer variable.

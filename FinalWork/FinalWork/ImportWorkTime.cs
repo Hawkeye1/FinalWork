@@ -9,7 +9,7 @@ namespace FinalWork
 {
     public class ImportWorkTime : Import
     {
-        public int Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
+        public Int32 Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
 
         public DataTable CountingWorkTime(DBManagement DBM, DataTable temp)
         {
@@ -34,8 +34,8 @@ namespace FinalWork
             staffTable.Columns[8].DataType = Type.GetType("System.Double");
             
 
-            int daysOff = 0, sickDays = 0, tripDays = 0;
-            double workTime = 0, conv = 0;
+            Int32 daysOff = 0, sickDays = 0, tripDays = 0;
+            Double workTime = 0, conv = 0;
             Boolean match = false;
             Employment = 1;
 

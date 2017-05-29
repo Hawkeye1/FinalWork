@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.awardMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.premiumMenuStrip = new System.Windows.Forms.MenuStrip();
             this.ImportWorkTimeStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.AddInDBStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.AddMembersStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,22 +54,22 @@
             this.infoLabel3 = new System.Windows.Forms.Label();
             this.infoLabel4 = new System.Windows.Forms.Label();
             this.infoLabel5 = new System.Windows.Forms.Label();
-            this.awardMenuStrip.SuspendLayout();
+            this.premiumMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blankDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // awardMenuStrip
+            // premiumMenuStrip
             // 
-            this.awardMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.premiumMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ImportWorkTimeStrip,
             this.AddInDBStrip,
             this.AddInFormStrip,
             this.DeleteRowStrip});
-            this.awardMenuStrip.Location = new System.Drawing.Point(0, 0);
-            this.awardMenuStrip.Name = "awardMenuStrip";
-            this.awardMenuStrip.Size = new System.Drawing.Size(984, 24);
-            this.awardMenuStrip.TabIndex = 0;
-            this.awardMenuStrip.Text = "menuStrip1";
+            this.premiumMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.premiumMenuStrip.Name = "premiumMenuStrip";
+            this.premiumMenuStrip.Size = new System.Drawing.Size(984, 24);
+            this.premiumMenuStrip.TabIndex = 0;
+            this.premiumMenuStrip.Text = "menuStrip1";
             // 
             // ImportWorkTimeStrip
             // 
@@ -252,7 +252,7 @@
             // infoLabel2
             // 
             this.infoLabel2.AutoSize = true;
-            this.infoLabel2.BackColor = System.Drawing.Color.Cyan;
+            this.infoLabel2.BackColor = System.Drawing.Color.CornflowerBlue;
             this.infoLabel2.Location = new System.Drawing.Point(13, 564);
             this.infoLabel2.Name = "infoLabel2";
             this.infoLabel2.Size = new System.Drawing.Size(258, 13);
@@ -272,7 +272,7 @@
             // infoLabel3
             // 
             this.infoLabel3.AutoSize = true;
-            this.infoLabel3.BackColor = System.Drawing.Color.YellowGreen;
+            this.infoLabel3.BackColor = System.Drawing.Color.Green;
             this.infoLabel3.Location = new System.Drawing.Point(13, 580);
             this.infoLabel3.Name = "infoLabel3";
             this.infoLabel3.Size = new System.Drawing.Size(290, 13);
@@ -282,7 +282,7 @@
             // infoLabel4
             // 
             this.infoLabel4.AutoSize = true;
-            this.infoLabel4.BackColor = System.Drawing.Color.Yellow;
+            this.infoLabel4.BackColor = System.Drawing.Color.DarkOrange;
             this.infoLabel4.Location = new System.Drawing.Point(13, 596);
             this.infoLabel4.Name = "infoLabel4";
             this.infoLabel4.Size = new System.Drawing.Size(202, 13);
@@ -292,7 +292,7 @@
             // infoLabel5
             // 
             this.infoLabel5.AutoSize = true;
-            this.infoLabel5.BackColor = System.Drawing.Color.MediumVioletRed;
+            this.infoLabel5.BackColor = System.Drawing.Color.MediumOrchid;
             this.infoLabel5.Location = new System.Drawing.Point(13, 612);
             this.infoLabel5.Name = "infoLabel5";
             this.infoLabel5.Size = new System.Drawing.Size(195, 13);
@@ -324,16 +324,17 @@
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.blankDataGridView);
             this.Controls.Add(this.nextSaveButton);
-            this.Controls.Add(this.awardMenuStrip);
-            this.MainMenuStrip = this.awardMenuStrip;
+            this.Controls.Add(this.premiumMenuStrip);
+            this.DoubleBuffered = true;
+            this.MainMenuStrip = this.premiumMenuStrip;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1000, 680);
             this.Name = "PremiumBlankWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Бланк премий";
-            this.awardMenuStrip.ResumeLayout(false);
-            this.awardMenuStrip.PerformLayout();
+            this.premiumMenuStrip.ResumeLayout(false);
+            this.premiumMenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blankDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -342,7 +343,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip awardMenuStrip;
+        private System.Windows.Forms.MenuStrip premiumMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem ImportWorkTimeStrip;
         private System.Windows.Forms.ToolStripMenuItem AddInDBStrip;
         private System.Windows.Forms.ToolStripMenuItem AddMembersStrip;

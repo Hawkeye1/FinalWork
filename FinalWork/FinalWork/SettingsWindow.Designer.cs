@@ -41,7 +41,7 @@
             this.tripDaysCheckBox = new System.Windows.Forms.CheckBox();
             this.sickDaysCheckBox = new System.Windows.Forms.CheckBox();
             this.tariffFactorСheckBox = new System.Windows.Forms.CheckBox();
-            this.worlRateCheckBox = new System.Windows.Forms.CheckBox();
+            this.workRateCheckBox = new System.Windows.Forms.CheckBox();
             this.kCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.accuracyUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeUpDown)).BeginInit();
@@ -199,15 +199,15 @@
             this.tariffFactorСheckBox.Text = "Тар. коэфф.";
             this.tariffFactorСheckBox.UseVisualStyleBackColor = true;
             // 
-            // worlRateCheckBox
+            // workRateCheckBox
             // 
-            this.worlRateCheckBox.AutoSize = true;
-            this.worlRateCheckBox.Location = new System.Drawing.Point(112, 128);
-            this.worlRateCheckBox.Name = "worlRateCheckBox";
-            this.worlRateCheckBox.Size = new System.Drawing.Size(62, 17);
-            this.worlRateCheckBox.TabIndex = 13;
-            this.worlRateCheckBox.Text = "Ставка";
-            this.worlRateCheckBox.UseVisualStyleBackColor = true;
+            this.workRateCheckBox.AutoSize = true;
+            this.workRateCheckBox.Location = new System.Drawing.Point(112, 128);
+            this.workRateCheckBox.Name = "workRateCheckBox";
+            this.workRateCheckBox.Size = new System.Drawing.Size(62, 17);
+            this.workRateCheckBox.TabIndex = 13;
+            this.workRateCheckBox.Text = "Ставка";
+            this.workRateCheckBox.UseVisualStyleBackColor = true;
             // 
             // kCheckBox
             // 
@@ -227,7 +227,7 @@
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(484, 211);
             this.Controls.Add(this.kCheckBox);
-            this.Controls.Add(this.worlRateCheckBox);
+            this.Controls.Add(this.workRateCheckBox);
             this.Controls.Add(this.tariffFactorСheckBox);
             this.Controls.Add(this.sickDaysCheckBox);
             this.Controls.Add(this.tripDaysCheckBox);
@@ -270,7 +270,7 @@
         private System.Windows.Forms.CheckBox tripDaysCheckBox;
         private System.Windows.Forms.CheckBox sickDaysCheckBox;
         private System.Windows.Forms.CheckBox tariffFactorСheckBox;
-        private System.Windows.Forms.CheckBox worlRateCheckBox;
+        private System.Windows.Forms.CheckBox workRateCheckBox;
         private System.Windows.Forms.CheckBox kCheckBox;
     }
 }

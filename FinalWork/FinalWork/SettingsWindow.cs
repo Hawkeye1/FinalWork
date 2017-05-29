@@ -26,7 +26,7 @@ namespace FinalWork
             this.tripDaysCheckBox.CheckedChanged += CheckBox_CheckedChanged;
             this.sickDaysCheckBox.CheckedChanged += CheckBox_CheckedChanged;
             this.tariffFactorСheckBox.CheckedChanged += CheckBox_CheckedChanged;
-            this.worlRateCheckBox.CheckedChanged += CheckBox_CheckedChanged;
+            this.workRateCheckBox.CheckedChanged += CheckBox_CheckedChanged;
             this.kCheckBox.CheckedChanged += CheckBox_CheckedChanged;
             Main = f;
             accuracyUpDown.Value = Main.Op.Accuracy;
@@ -37,7 +37,7 @@ namespace FinalWork
             tripDaysCheckBox.Checked = Main.Op.ColumnsVisible[2];
             sickDaysCheckBox.Checked = Main.Op.ColumnsVisible[3];
             tariffFactorСheckBox.Checked = Main.Op.ColumnsVisible[4];
-            worlRateCheckBox.Checked = Main.Op.ColumnsVisible[5];
+            workRateCheckBox.Checked = Main.Op.ColumnsVisible[5];
             kCheckBox.Checked = Main.Op.ColumnsVisible[6];
             change = false;
         }
@@ -52,6 +52,7 @@ namespace FinalWork
         private void Settings_Closed(object sender, EventArgs e)
         {
             Main.Enabled = true;
+            Main.Show();
         }
         private void UpDown_ValueChanged(object sender, EventArgs e)
         {
@@ -86,7 +87,7 @@ namespace FinalWork
                Main.Op.ColumnsVisible[2] = tripDaysCheckBox.Checked;
                Main.Op.ColumnsVisible[3] = sickDaysCheckBox.Checked;
                Main.Op.ColumnsVisible[4] = tariffFactorСheckBox.Checked;
-               Main.Op.ColumnsVisible[5] = worlRateCheckBox.Checked;
+               Main.Op.ColumnsVisible[5] = workRateCheckBox.Checked;
                Main.Op.ColumnsVisible[6] = kCheckBox.Checked;
                Main.Op.SaveChange();
 

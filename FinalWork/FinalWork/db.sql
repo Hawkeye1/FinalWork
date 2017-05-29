@@ -1,0 +1,14 @@
+CREATE TABLE archive ("report_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"date" date NOT NULL);
+CREATE TABLE employment ("employment_id" integer NOT NULL PRIMARY KEY,type text NOT NULL);
+INSERT INTO employment ( "employment_id",type ) VALUES ( '0','совместитель' );
+INSERT INTO employment ( "employment_id",type ) VALUES ( '1','штатный' );
+CREATE TABLE members ("member_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,initials text NOT NULL UNIQUE,experience real NOT NULL);
+CREATE TABLE pluralists ("pluralist_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"member_id" integer NOT NULL UNIQUE);
+CREATE TABLE positions ("position_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,position TEXT NOT NULL,"tariff_rate" real NOT NULL);
+INSERT INTO positions ( "position_id",position,"tariff_rate" ) VALUES ( '1','ассистент','1.0' );
+INSERT INTO positions ( "position_id",position,"tariff_rate" ) VALUES ( '2','доцент','1.1' );
+INSERT INTO positions ( "position_id",position,"tariff_rate" ) VALUES ( '3','профессор','1.2' );
+INSERT INTO positions ( "position_id",position,"tariff_rate" ) VALUES ( '4','старший преподаватель','1.1' );
+CREATE TABLE premiums ("premium_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,budget real NOT NULL,paid real NOT NULL,paragraph real NOT NULL,"date" date NOT NULL);
+CREATE TABLE report ("report_id" integer NOT NULL REFERENCES archive ("report_id"),"record_id" integer NOT NULL,"member_id" integer NOT NULL REFERENCES members ("member_id"),"position_id" integer NOT NULL REFERENCES positions ("position_id"),"employment_id" integer NOT NULL REFERENCES employment ("employment_id"),"work_hours" real,"days_off" integer,"trip_days" integer,"sick_days" integer,"work_rate" real,CoLP real,"premium_auto" real,"premium_by_hand" real,correction real,"premium_total" real,note text,form integer NOT NULL,PRIMARY KEY (report_id,record_id));
+CREATE TABLE staff ("employee_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"member_id" integer NOT NULL UNIQUE);

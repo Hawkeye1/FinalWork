@@ -9,7 +9,7 @@ namespace FinalWork
 {
     public class ImportStaff : Import 
     {
-        public int Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
+        public Int32 Employment { get; set; }                                             // тип занятости 0 - совместитель 1 - штатный
 
         public DataTable DataProcessing(DBManagement DBM, DataTable temp)
         {

@@ -8,7 +8,7 @@ namespace FinalWork
 {
     public class CreatingPdfFiles
     {
-        public void CreatePdfFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, int type, string filepath)
+        public void CreatePdfFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, Int32 type, string filepath)
         {
 
         }
