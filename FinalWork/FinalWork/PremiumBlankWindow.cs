@@ -696,7 +696,8 @@ namespace FinalWork
                             {
                                 if (SFD.FilterIndex != 3)
                                 {
-                                    Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName);
+                                    Int32[] indexes = { 0, 1, 15 };
+                                    Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName, indexes);
                                 }
                                 else
                                 {

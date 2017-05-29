@@ -30,6 +30,7 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.BlankStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.ReportExportStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.membersDataGridView = new System.Windows.Forms.DataGridView();
             this.memberZedGraphControl = new ZedGraph.ZedGraphControl();
@@ -42,6 +43,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BlankStrip,
+            this.ReportExportStrip,
             this.SettingStrip});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -55,6 +57,13 @@
             this.BlankStrip.Size = new System.Drawing.Size(51, 20);
             this.BlankStrip.Text = "Отчёт";
             this.BlankStrip.Click += new System.EventHandler(this.BlankStrip_Click);
+            // 
+            // ReportExportStrip
+            // 
+            this.ReportExportStrip.Name = "ReportExportStrip";
+            this.ReportExportStrip.Size = new System.Drawing.Size(103, 20);
+            this.ReportExportStrip.Text = "Экспорт отчёта";
+            this.ReportExportStrip.Click += new System.EventHandler(this.ReportExportStrip_Click);
             // 
             // SettingStrip
             // 
@@ -133,6 +142,7 @@
         private System.Windows.Forms.ToolStripMenuItem SettingStrip;
         private ZedGraph.ZedGraphControl memberZedGraphControl;
         private ZedGraph.ZedGraphControl premiumZedGraphControl;
+        private System.Windows.Forms.ToolStripMenuItem ReportExportStrip;
     }
 }
 

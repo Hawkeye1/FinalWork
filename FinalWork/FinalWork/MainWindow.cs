@@ -113,7 +113,7 @@ namespace FinalWork
 
         private void BlankStrip_Click(object sender, EventArgs e)
         {
-            Form AB = new PremiumBlankWindow(this);
+            PremiumBlankWindow AB = new PremiumBlankWindow(this);
             AB.Visible = true;
             this.Enabled = false;
             this.Hide();
@@ -121,8 +121,15 @@ namespace FinalWork
 
         private void SettingStrip_Click(object sender, EventArgs e)
         {
-            Form S = new SettingsWindow(this);
+            SettingsWindow S = new SettingsWindow(this);
             S.Visible = true;
+            this.Enabled = false;
+        }
+
+        private void ReportExportStrip_Click(object sender, EventArgs e)
+        {
+            ReportExportWindow REW = new ReportExportWindow(this);
+            REW.Visible = true;
             this.Enabled = false;
         }
     }

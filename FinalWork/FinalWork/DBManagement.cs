@@ -230,10 +230,10 @@ namespace FinalWork
 
                         cmd.Reset();
                         cmd.CommandText = "INSERT INTO report(report_id, record_id, member_id, position_id," +
-                            "employment_id, work_hours, days_off, trip_days, sick_days, work_rate, CoLP," +
+                            "employment_id, work_hours, days_off, trip_days, sick_days, experiance, work_rate, CoLP," +
                             "premium_auto, premium_by_hand, correction, premium_total, note, form)" +
                             "VALUES (@report_id, @record_id, @member_id, @position_id," +
-                            "@employment_id, @work_hours, @days_off, @trip_days, @sick_days, @work_rate, @CoLP," +
+                            "@employment_id, @work_hours, @days_off, @trip_days, @sick_days, @experiance, @work_rate, @CoLP," +
                             "@premium_auto, @premium_by_hand, @correction, @premium_total, @note, @form)";
                         cmd.Parameters.AddWithValue("@report_id", report_id);
                         cmd.Parameters.AddWithValue("@record_id", record_id);
@@ -244,6 +244,7 @@ namespace FinalWork
                         cmd.Parameters.AddWithValue("@days_off", Convert.ToInt32(row[4].ToString()));
                         cmd.Parameters.AddWithValue("@trip_days", Convert.ToInt32(row[5].ToString()));
                         cmd.Parameters.AddWithValue("@sick_days", Convert.ToInt32(row[6].ToString()));
+                        cmd.Parameters.AddWithValue("@experiance", Convert.ToDouble(row[8].ToString()));
                         cmd.Parameters.AddWithValue("@work_rate", Convert.ToDouble(row[9].ToString()));
                         cmd.Parameters.AddWithValue("@CoLP", Convert.ToDouble(row[10].ToString()));
                         cmd.Parameters.AddWithValue("@premium_auto", Convert.ToDouble(row[13].ToString()));
@@ -391,6 +392,62 @@ namespace FinalWork
             }
 
             return dateIssue;
+        }
+
+        public DataTable GetArchive()
+        {
+            DataTable archiveData = new DataTable();
+            archiveData.Reset();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select report_id, cast(date as text) from archive;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                adapter.Fill(archiveData);
+            }
+
+            return archiveData;
+        }
+
+        public DataTable GetReportInfo(Int32 report_id)
+        {
+            DataTable reportData = new DataTable();
+            reportData.Reset();
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select m.initials, p.position, r.premium_total, r.form from report r join members m on r.member_id = m.member_id " + 
+                    "join positions p on r.position_id = p.position_id where report_id = @report_id;";
+            
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@report_id", report_id);
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                adapter.Fill(reportData);
+            }
+
+            return reportData;
+        }
+
+        public Double GetFundSum(Int32 report_id, Int32 fund_id) // 0 - бюджет 1 - платное 2 - §54
+        {
+            Double sum = 0.0;
+
+            using (conn = new SQLiteConnection("Data Source=department.db; Version=3;"))
+            {
+                conn.Open();
+                String command = "select SUM(premium_total) from report where report_id = @report_id and form = @fund_id;";
+
+                SQLiteCommand cmd = new SQLiteCommand(command, conn);
+                cmd.Parameters.AddWithValue("@report_id", report_id);
+                cmd.Parameters.AddWithValue("@fund_id", fund_id);
+                sum = Convert.ToDouble(cmd.ExecuteScalar());
+            }
+
+            return sum;
         }
     }
 }

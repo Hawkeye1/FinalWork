@@ -8,12 +8,13 @@ using AODL.Document.Styles.Properties;
 using AODL.Document.Content.Tables;
 using AODL.Document.Styles;
 using System.Data;
+using System.IO;
 
 namespace FinalWork
 {
     public class CreatingOdtHtmlFile
     {
-        public void CreateOdtHtmlFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, int type, string filepath)
+        public void CreateOdtHtmlFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, int type, string filepath, Int32[] Indexes)
         {
             TextDocument Document = new TextDocument();
             Document.Load("template//report.odt");
@@ -120,13 +121,13 @@ namespace FinalWork
                     columnBudget1.TextContent.Add(new SimpleText(Document, Convert.ToString(budgetId)));
                     table.RowCollection[currentRow].CellCollection[0].Content.Add(columnBudget1);
                     Paragraph columnBudget2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnBudget2.TextContent.Add(new SimpleText(Document, row[0].ToString()));
+                    columnBudget2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
                     table.RowCollection[currentRow].CellCollection[1].Content.Add(columnBudget2);
                     Paragraph columnBudget3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnBudget3.TextContent.Add(new SimpleText(Document, row[1].ToString()));
+                    columnBudget3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
                     table.RowCollection[currentRow].CellCollection[2].Content.Add(columnBudget3);
                     Paragraph columnBudget4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnBudget4.TextContent.Add(new SimpleText(Document, row[15].ToString()));
+                    columnBudget4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
                     table.RowCollection[currentRow].CellCollection[3].Content.Add(columnBudget4);
 
                     currentRow++;
@@ -164,13 +165,13 @@ namespace FinalWork
                     columnPaid1.TextContent.Add(new SimpleText(Document, Convert.ToString(paidId)));
                     table.RowCollection[currentRow].CellCollection[0].Content.Add(columnPaid1);
                     Paragraph columnPaid2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnPaid2.TextContent.Add(new SimpleText(Document, row[0].ToString()));
+                    columnPaid2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
                     table.RowCollection[currentRow].CellCollection[1].Content.Add(columnPaid2);
                     Paragraph columnPaid3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnPaid3.TextContent.Add(new SimpleText(Document, row[1].ToString()));
+                    columnPaid3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
                     table.RowCollection[currentRow].CellCollection[2].Content.Add(columnPaid3);
                     Paragraph columnPaid4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnPaid4.TextContent.Add(new SimpleText(Document, row[15].ToString()));
+                    columnPaid4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
                     table.RowCollection[currentRow].CellCollection[3].Content.Add(columnPaid4);
 
                     currentRow++;
@@ -208,13 +209,13 @@ namespace FinalWork
                     columnParagraph1.TextContent.Add(new SimpleText(Document, Convert.ToString(paragraphId)));
                     table.RowCollection[currentRow].CellCollection[0].Content.Add(columnParagraph1);
                     Paragraph columnParagraph2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnParagraph2.TextContent.Add(new SimpleText(Document, row[0].ToString()));
+                    columnParagraph2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
                     table.RowCollection[currentRow].CellCollection[1].Content.Add(columnParagraph2);
                     Paragraph columnParagraph3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnParagraph3.TextContent.Add(new SimpleText(Document, row[1].ToString()));
+                    columnParagraph3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
                     table.RowCollection[currentRow].CellCollection[2].Content.Add(columnParagraph3);
                     Paragraph columnParagraph4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                    columnParagraph4.TextContent.Add(new SimpleText(Document, row[15].ToString()));
+                    columnParagraph4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
                     table.RowCollection[currentRow].CellCollection[3].Content.Add(columnParagraph4);
 
                     currentRow++;
@@ -244,20 +245,21 @@ namespace FinalWork
 
             Document.Content.Insert(tableId, table);
 
-            if (type == 1)
-            {
-                Document.SaveTo(filepath);
-            }
-            else
-            {
-                Document.SaveTo(filepath);
-            }
+            Document.SaveTo(filepath);
 
-            if (Copy)
+            if (Copy && type > 0)
             {
+                Directory.CreateDirectory("ReportsCopy");
 
+                String name = "ReportsCopy//";
+                name += DateTime.Now.ToString("g");
+                name = name.Replace(".", "");
+                name = name.Replace(" ", "");
+                name = name.Replace(":", "");
+                name += ".odt";
+
+                Document.SaveTo(name);
             }
         }
-
     }
 }
