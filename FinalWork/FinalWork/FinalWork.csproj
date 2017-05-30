@@ -35,16 +35,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AODL, Version=1.2.0.1, Culture=neutral">
-      <HintPath>..\packages\AODL.1.2.0.1\lib\AODL.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\AODL.dll</HintPath>
+    </Reference>
+    <Reference Include="AODL.pdf.exporter">
+      <HintPath>..\..\..\ODTCreating\ODTCreating\AODL.pdf.exporter.dll</HintPath>
     </Reference>
     <Reference Include="Excel, Version=2.1.2.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Excel.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <HintPath>..\packages\AODL.1.2.0.1\lib\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\..\ODTCreating\ODTCreating\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

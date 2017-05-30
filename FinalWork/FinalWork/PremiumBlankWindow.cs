@@ -56,7 +56,7 @@ namespace FinalWork
             }
         }
         public PremiumCalculation PC { get; set; }
-        
+
         public PremiumBlankWindow(MainWindow f)
         {
             InitializeComponent();
@@ -108,7 +108,7 @@ namespace FinalWork
 
         private void BlankDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Неверный тип данных!\n Ожидаемый тип: " + blankDataGridView.CurrentCell.ValueType.ToString(), "Error", 
+            MessageBox.Show("Неверный тип данных!\n Ожидаемый тип: " + blankDataGridView.CurrentCell.ValueType.ToString(), "Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -186,7 +186,7 @@ namespace FinalWork
         {
             if (blankDataGridView.CurrentCell.ColumnIndex != 16)
             {
-                if(blankDataGridView.CurrentCell.Value.ToString() == "")
+                if (blankDataGridView.CurrentCell.Value.ToString() == "")
                 {
                     if (blankDataGridView.CurrentCell.ColumnIndex != 12 && blankDataGridView.CurrentCell.ColumnIndex != 14)
                     {
@@ -402,7 +402,7 @@ namespace FinalWork
                 {
                     if (member[1].ToString().Equals(DGV.Rows[i].Cells[0].Value))
                     {
-                        DGV.Rows[i].Cells[8].Value = (Convert.ToDouble(DGV.Rows[i].Cells[8].Value) == 1.0) ? 
+                        DGV.Rows[i].Cells[8].Value = (Convert.ToDouble(DGV.Rows[i].Cells[8].Value) == 1.0) ?
                             Convert.ToDouble(member[2].ToString()) : DGV.Rows[i].Cells[8].Value;
 
                         if (DGV.Rows[i].Cells[2].Value.Equals("штатный"))
@@ -454,7 +454,7 @@ namespace FinalWork
                 {
                     if (blankDataGridView.Rows[i].DefaultCellStyle.BackColor != Color.CornflowerBlue)
                     {
-                        if (Convert.ToInt32(blankDataGridView.Rows[i].Cells[5].Value) != 0 && 
+                        if (Convert.ToInt32(blankDataGridView.Rows[i].Cells[5].Value) != 0 &&
                             Convert.ToInt32(blankDataGridView.Rows[i].Cells[6].Value) != 0)
                         {
                             blankDataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Green;
@@ -504,7 +504,7 @@ namespace FinalWork
             Int32 formId1 = 1, formId2 = 2;
             DataTable table = (DataTable)DGV.DataSource;
             DataTable addMembers = table.Clone();
-            
+
             if (Step == 1)
             {
                 formId1 = 0;
@@ -613,7 +613,7 @@ namespace FinalWork
 
         private void ChangeStep()
         {
-            String[] BlankName = {"БЮДЖЕТНАЯ ФОРМА" ,"ПЛАТНАЯ ФОРМА" , "§54" };
+            String[] BlankName = { "БЮДЖЕТНАЯ ФОРМА", "ПЛАТНАЯ ФОРМА", "§54" };
             String[] FundName = { "Бюджет", "Платное", "§54" };
 
             if (Step == 0)
@@ -694,15 +694,8 @@ namespace FinalWork
 
                             if (SFD.ShowDialog() == DialogResult.OK)
                             {
-                                if (SFD.FilterIndex != 3)
-                                {
-                                    Int32[] indexes = { 0, 1, 15 };
-                                    Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName, indexes);
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Временно не доступно", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                }
+                                Int32[] indexes = { 0, 1, 15 };
+                                Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName, indexes);
                             }
                         }
 

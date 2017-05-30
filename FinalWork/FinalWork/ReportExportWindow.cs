@@ -38,7 +38,7 @@ namespace FinalWork
             }
         }
 
-        private void ExportInFile(String filePath)
+        private void ExportInFile(String filePath, Int32 fileIndex)
         {
             Int32 report_id = 0;
             Double[] funds = { 0.0, 0.0, 0.0 };
@@ -71,7 +71,7 @@ namespace FinalWork
             }
 
             Int32[] indexes = { 0, 1, 2 };
-            Main.COHF.CreateOdtHtmlFile(false, forms, funds, 1, filePath, indexes);
+            Main.COHF.CreateOdtHtmlFile(false, forms, funds, fileIndex, filePath, indexes);
         }
 
         private void acceptButton_Click(object sender, EventArgs e)
@@ -86,14 +86,7 @@ namespace FinalWork
 
                 if (SFD.ShowDialog() == DialogResult.OK)
                 {
-                    if (SFD.FilterIndex != 3)
-                    {
-                        ExportInFile(SFD.FileName);                       
-                    }
-                    else
-                    {
-                        MessageBox.Show("Временно не доступно", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    ExportInFile(SFD.FileName, SFD.FilterIndex);                       
                 }
 
                 this.Close();

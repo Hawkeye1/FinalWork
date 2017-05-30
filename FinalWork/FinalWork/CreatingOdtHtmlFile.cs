@@ -6,9 +6,12 @@ using AODL.Document.TextDocuments;
 using AODL.Document.Content.Text;
 using AODL.Document.Styles.Properties;
 using AODL.Document.Content.Tables;
-using AODL.Document.Styles;
 using System.Data;
 using System.IO;
+using iTextSharp.text.pdf;
+using System.Collections;
+using AODL.ExternalExporter.PDF.Document.ContentConverter;
+using AODL.ExternalExporter.PDF.Document.StyleConverter;
 
 namespace FinalWork
 {
@@ -88,16 +91,16 @@ namespace FinalWork
 
             Paragraph columnName1 = ParagraphBuilder.CreateStandardTextParagraph(Document);
             columnName1.TextContent.Add(new SimpleText(Document, "№"));
-            table.RowCollection[currentRow].CellCollection[0].Content.Add(columnName1);
+            table.Rows[currentRow].Cells[0].Content.Add(columnName1);
             Paragraph columnName2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
             columnName2.TextContent.Add(new SimpleText(Document, "Ф.И.О."));
-            table.RowCollection[currentRow].CellCollection[1].Content.Add(columnName2);
+            table.Rows[currentRow].Cells[1].Content.Add(columnName2);
             Paragraph columnName3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
             columnName3.TextContent.Add(new SimpleText(Document, "Должность"));
-            table.RowCollection[currentRow].CellCollection[2].Content.Add(columnName3);
+            table.Rows[currentRow].Cells[2].Content.Add(columnName3);
             Paragraph columnName4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
             columnName4.TextContent.Add(new SimpleText(Document, "Размер премии (руб.)"));
-            table.RowCollection[currentRow].CellCollection[3].Content.Add(columnName4);
+            table.Rows[currentRow].Cells[3].Content.Add(columnName4);
 
             currentRow++;
 
@@ -109,8 +112,8 @@ namespace FinalWork
 
                 Paragraph budget = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 budget.TextContent.Add(new SimpleText(Document, "По бюджетной форме"));
-                table.RowCollection[currentRow].CellCollection[0].Content.Add(budget);
-                table.RowCollection[currentRow].MergeCells(Document, 0, 4, true);
+                table.Rows[currentRow].Cells[0].Content.Add(budget);
+                table.Rows[currentRow].MergeCells(Document, 0, 4, true);
 
                 currentRow++;
                 int budgetId = 1;
@@ -119,16 +122,16 @@ namespace FinalWork
                 {
                     Paragraph columnBudget1 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnBudget1.TextContent.Add(new SimpleText(Document, Convert.ToString(budgetId)));
-                    table.RowCollection[currentRow].CellCollection[0].Content.Add(columnBudget1);
+                    table.Rows[currentRow].Cells[0].Content.Add(columnBudget1);
                     Paragraph columnBudget2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnBudget2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[1].Content.Add(columnBudget2);
+                    table.Rows[currentRow].Cells[1].Content.Add(columnBudget2);
                     Paragraph columnBudget3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnBudget3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[2].Content.Add(columnBudget3);
+                    table.Rows[currentRow].Cells[2].Content.Add(columnBudget3);
                     Paragraph columnBudget4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnBudget4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[3].Content.Add(columnBudget4);
+                    table.Rows[currentRow].Cells[3].Content.Add(columnBudget4);
 
                     currentRow++;
                     budgetId++;
@@ -136,11 +139,11 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по бюджетной форме:"));
-                table.RowCollection[currentRow].CellCollection[1].Content.Add(result);
+                table.Rows[currentRow].Cells[1].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[0].ToString()));
-                table.RowCollection[currentRow].CellCollection[3].Content.Add(sum);
-                table.RowCollection[currentRow].MergeCells(Document, 2, 2, true);
+                table.Rows[currentRow].Cells[3].Content.Add(sum);
+                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
 
                 currentRow++;
             }
@@ -153,8 +156,8 @@ namespace FinalWork
 
                 Paragraph paid = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 paid.TextContent.Add(new SimpleText(Document, "По платной форме"));
-                table.RowCollection[currentRow].CellCollection[0].Content.Add(paid);
-                table.RowCollection[currentRow].MergeCells(Document, 0, 4, true);
+                table.Rows[currentRow].Cells[0].Content.Add(paid);
+                table.Rows[currentRow].MergeCells(Document, 0, 4, true);
 
                 currentRow++;
                 int paidId = 1;
@@ -163,16 +166,16 @@ namespace FinalWork
                 {
                     Paragraph columnPaid1 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnPaid1.TextContent.Add(new SimpleText(Document, Convert.ToString(paidId)));
-                    table.RowCollection[currentRow].CellCollection[0].Content.Add(columnPaid1);
+                    table.Rows[currentRow].Cells[0].Content.Add(columnPaid1);
                     Paragraph columnPaid2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnPaid2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[1].Content.Add(columnPaid2);
+                    table.Rows[currentRow].Cells[1].Content.Add(columnPaid2);
                     Paragraph columnPaid3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnPaid3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[2].Content.Add(columnPaid3);
+                    table.Rows[currentRow].Cells[2].Content.Add(columnPaid3);
                     Paragraph columnPaid4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnPaid4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[3].Content.Add(columnPaid4);
+                    table.Rows[currentRow].Cells[3].Content.Add(columnPaid4);
 
                     currentRow++;
                     paidId++;
@@ -180,11 +183,11 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по платной форме:"));
-                table.RowCollection[currentRow].CellCollection[1].Content.Add(result);
+                table.Rows[currentRow].Cells[1].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[1].ToString()));
-                table.RowCollection[currentRow].CellCollection[3].Content.Add(sum);
-                table.RowCollection[currentRow].MergeCells(Document, 2, 2, true);
+                table.Rows[currentRow].Cells[3].Content.Add(sum);
+                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
 
                 currentRow++;
             }
@@ -197,8 +200,8 @@ namespace FinalWork
 
                 Paragraph paragraph = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 paragraph.TextContent.Add(new SimpleText(Document, "По §54"));
-                table.RowCollection[currentRow].CellCollection[0].Content.Add(paragraph);
-                table.RowCollection[currentRow].MergeCells(Document, 0, 4, true);
+                table.Rows[currentRow].Cells[0].Content.Add(paragraph);
+                table.Rows[currentRow].MergeCells(Document, 0, 4, true);
 
                 currentRow++;
                 int paragraphId = 1;
@@ -207,16 +210,16 @@ namespace FinalWork
                 {
                     Paragraph columnParagraph1 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnParagraph1.TextContent.Add(new SimpleText(Document, Convert.ToString(paragraphId)));
-                    table.RowCollection[currentRow].CellCollection[0].Content.Add(columnParagraph1);
+                    table.Rows[currentRow].Cells[0].Content.Add(columnParagraph1);
                     Paragraph columnParagraph2 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnParagraph2.TextContent.Add(new SimpleText(Document, row[Indexes[0]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[1].Content.Add(columnParagraph2);
+                    table.Rows[currentRow].Cells[1].Content.Add(columnParagraph2);
                     Paragraph columnParagraph3 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnParagraph3.TextContent.Add(new SimpleText(Document, row[Indexes[1]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[2].Content.Add(columnParagraph3);
+                    table.Rows[currentRow].Cells[2].Content.Add(columnParagraph3);
                     Paragraph columnParagraph4 = ParagraphBuilder.CreateStandardTextParagraph(Document);
                     columnParagraph4.TextContent.Add(new SimpleText(Document, row[Indexes[2]].ToString()));
-                    table.RowCollection[currentRow].CellCollection[3].Content.Add(columnParagraph4);
+                    table.Rows[currentRow].Cells[3].Content.Add(columnParagraph4);
 
                     currentRow++;
                     paragraphId++;
@@ -224,11 +227,11 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по §54:"));
-                table.RowCollection[currentRow].CellCollection[1].Content.Add(result);
+                table.Rows[currentRow].Cells[1].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[2].ToString()));
-                table.RowCollection[currentRow].CellCollection[3].Content.Add(sum);
-                table.RowCollection[currentRow].MergeCells(Document, 2, 2, true);
+                table.Rows[currentRow].Cells[3].Content.Add(sum);
+                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
 
                 currentRow++;
             }
@@ -237,17 +240,51 @@ namespace FinalWork
 
             Paragraph total = ParagraphBuilder.CreateStandardTextParagraph(Document);
             total.TextContent.Add(new SimpleText(Document, "Итого:"));
-            table.RowCollection[currentRow].CellCollection[1].Content.Add(total);
+            table.Rows[currentRow].Cells[1].Content.Add(total);
             Paragraph totalSum = ParagraphBuilder.CreateStandardTextParagraph(Document);
             totalSum.TextContent.Add(new SimpleText(Document, totalFund.ToString()));
-            table.RowCollection[currentRow].CellCollection[3].Content.Add(totalSum);
-            table.RowCollection[currentRow].MergeCells(Document, 2, 2, true);
+            table.Rows[currentRow].Cells[3].Content.Add(totalSum);
+            table.Rows[currentRow].MergeCells(Document, 2, 2, true);
 
             Document.Content.Insert(tableId, table);
 
-            Document.SaveTo(filepath);
+            if (type != 3)
+            {
+                Document.SaveTo(filepath);
+            }
+            else
+            {
+                BaseFont baseFont = BaseFont.CreateFont(@"template\\TimesNewRoman.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 14);
 
-            if (Copy && type > 0)
+                DefaultDocumentStyles defaultDocumentStyle;
+                if (Document is AODL.Document.TextDocuments.TextDocument)
+                    defaultDocumentStyle = DefaultDocumentStyles.Instance(
+                        ((AODL.Document.TextDocuments.TextDocument)Document).DocumentStyles, Document);
+                else
+                {
+                    throw new Exception("Unknown IDocument implementation.");
+                }
+
+                defaultDocumentStyle.Init();
+                defaultDocumentStyle.DefaultTextFont = font;
+
+                var doc = new iTextSharp.text.Document();
+                PdfWriter pdfWriter = PdfWriter.GetInstance(doc, new FileStream(filepath, FileMode.Create));
+                doc.Open();
+
+                ArrayList al = MixedContentConverter.GetMixedPdfContent(Document.Content);
+
+                foreach (Object obj in al)
+                {
+                    iTextSharp.text.IElement element = obj as iTextSharp.text.IElement;
+                    doc.Add(element);
+                }
+
+                doc.Close();
+            }
+
+            if (Copy)
             {
                 Directory.CreateDirectory("ReportsCopy");
 

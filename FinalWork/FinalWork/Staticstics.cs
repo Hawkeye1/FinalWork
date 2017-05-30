@@ -63,63 +63,66 @@ namespace FinalWork
             Double[] paragraphValue = new Double[premiumData.Rows.Count];
             String[] date = new String[premiumData.Rows.Count];
 
-            if (!premiumData.Rows[0][1].Equals(DBNull.Value))
+            if (premiumData.Rows.Count != 0)
             {
-                for (int i = 0; i < premiumData.Rows.Count; i++)
+                if (!premiumData.Rows[0][1].Equals(DBNull.Value))
                 {
-                    budgetValue[i] = Convert.ToDouble(premiumData.Rows[i][1]);
-                    paidValue[i] = Convert.ToDouble(premiumData.Rows[i][2]);
-                    paragraphValue[i] = Convert.ToDouble(premiumData.Rows[i][3]);
-                    DateTime dt = Convert.ToDateTime(premiumData.Rows[i][4]);
-                    date[i] = dt.ToString("dd.MM.yyyy");
+                    for (int i = 0; i < premiumData.Rows.Count; i++)
+                    {
+                        budgetValue[i] = Convert.ToDouble(premiumData.Rows[i][1]);
+                        paidValue[i] = Convert.ToDouble(premiumData.Rows[i][2]);
+                        paragraphValue[i] = Convert.ToDouble(premiumData.Rows[i][3]);
+                        DateTime dt = Convert.ToDateTime(premiumData.Rows[i][4]);
+                        date[i] = dt.ToString("dd.MM.yyyy");
+                    }
                 }
+
+                GraphPane pane = ZGC.GraphPane;
+                pane.CurveList.Clear();
+                pane.GraphItemList.Clear();
+
+                BarItem budget = pane.AddBar("Бюджет", null, budgetValue, Color.OrangeRed);
+                BarItem paid = pane.AddBar("Платное", null, paidValue, Color.LightBlue);
+                BarItem paragraph = pane.AddBar("§54", null, paragraphValue, Color.LightGreen);
+                budget.Bar.Fill.Type = FillType.Solid;
+                paid.Bar.Fill.Type = FillType.Solid;
+                paragraph.Bar.Fill.Type = FillType.Solid;
+                for (int i = 0; i < budget.Points.Count; i++)
+                {
+                    TextItem tiB = new TextItem(budget.Points[i].Y.ToString(), (float)budget.Points[i].X - 0.25f, (float)budget.Points[i].Y / 5);
+                    tiB.FontSpec.Border.IsVisible = false;
+                    tiB.FontSpec.Fill.Type = FillType.None;
+                    tiB.FontSpec.Size = 16;
+                    tiB.FontSpec.IsBold = true;
+                    tiB.FontSpec.Angle = -90;
+                    pane.GraphItemList.Add(tiB);
+                    TextItem tiPaid = new TextItem(paid.Points[i].Y.ToString(), (float)paid.Points[i].X, (float)paid.Points[i].Y / 5);
+                    tiPaid.FontSpec.Border.IsVisible = false;
+                    tiPaid.FontSpec.Fill.Type = FillType.None;
+                    tiPaid.FontSpec.Size = 16;
+                    tiPaid.FontSpec.IsBold = true;
+                    tiPaid.FontSpec.Angle = -90;
+                    pane.GraphItemList.Add(tiPaid);
+                    TextItem tiPara = new TextItem(paragraph.Points[i].Y.ToString(), (float)paragraph.Points[i].X + 0.25f, (float)paragraph.Points[i].Y / 5);
+                    tiPara.FontSpec.Border.IsVisible = false;
+                    tiPara.FontSpec.Fill.Type = FillType.None;
+                    tiPara.FontSpec.Size = 16;
+                    tiPara.FontSpec.IsBold = true;
+                    tiPara.FontSpec.Angle = -90;
+                    pane.GraphItemList.Add(tiPara);
+                }
+
+                pane.XAxis.Type = AxisType.Text;
+                pane.XAxis.TextLabels = date;
+                pane.MinBarGap = 0.0f;
+                pane.MinClusterGap = 1.0f;
+                pane.YAxis.Type = AxisType.Log;
+                pane.YAxis.Min = 1.0f;
+                pane.Legend.FontSpec.Size = 14;
+
+                ZGC.AxisChange();
+                ZGC.Invalidate();
             }
-
-            GraphPane pane = ZGC.GraphPane;
-            pane.CurveList.Clear();
-            pane.GraphItemList.Clear();
-
-            BarItem budget = pane.AddBar("Бюджет", null, budgetValue, Color.OrangeRed);
-            BarItem paid = pane.AddBar("Платное", null, paidValue, Color.LightBlue);
-            BarItem paragraph = pane.AddBar("§54", null, paragraphValue, Color.LightGreen);
-            budget.Bar.Fill.Type = FillType.Solid;
-            paid.Bar.Fill.Type = FillType.Solid;
-            paragraph.Bar.Fill.Type = FillType.Solid;
-            for (int i = 0; i < budget.Points.Count; i++)
-            {
-                TextItem tiB = new TextItem(budget.Points[i].Y.ToString(), (float)budget.Points[i].X - 0.25f, (float)budget.Points[i].Y / 5);
-                tiB.FontSpec.Border.IsVisible = false;
-                tiB.FontSpec.Fill.Type = FillType.None;
-                tiB.FontSpec.Size = 16;
-                tiB.FontSpec.IsBold = true;
-                tiB.FontSpec.Angle = -90;
-                pane.GraphItemList.Add(tiB);
-                TextItem tiPaid = new TextItem(paid.Points[i].Y.ToString(), (float)paid.Points[i].X, (float)paid.Points[i].Y / 5);
-                tiPaid.FontSpec.Border.IsVisible = false;
-                tiPaid.FontSpec.Fill.Type = FillType.None;
-                tiPaid.FontSpec.Size = 16;
-                tiPaid.FontSpec.IsBold = true;
-                tiPaid.FontSpec.Angle = -90;
-                pane.GraphItemList.Add(tiPaid);
-                TextItem tiPara = new TextItem(paragraph.Points[i].Y.ToString(), (float)paragraph.Points[i].X + 0.25f, (float)paragraph.Points[i].Y / 5);
-                tiPara.FontSpec.Border.IsVisible = false;
-                tiPara.FontSpec.Fill.Type = FillType.None;
-                tiPara.FontSpec.Size = 16;
-                tiPara.FontSpec.IsBold = true;
-                tiPara.FontSpec.Angle = -90;
-                pane.GraphItemList.Add(tiPara);
-            }
-
-            pane.XAxis.Type = AxisType.Text;
-            pane.XAxis.TextLabels = date;
-            pane.MinBarGap = 0.0f;
-            pane.MinClusterGap = 1.0f;
-            pane.YAxis.Type = AxisType.Log;
-            pane.YAxis.Min = 1.0f;
-            pane.Legend.FontSpec.Size = 14;
-
-            ZGC.AxisChange();
-            ZGC.Invalidate();
         }
     }
 }
