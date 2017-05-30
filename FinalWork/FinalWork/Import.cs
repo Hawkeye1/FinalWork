@@ -10,7 +10,7 @@ namespace FinalWork
     public class Import
     {
         public Stream ExcelFile { get; set; }
-        public int FileType { get; set; }
+        public Int32 FileType { get; set; }
 
         public DataTable LoadData()
         {
