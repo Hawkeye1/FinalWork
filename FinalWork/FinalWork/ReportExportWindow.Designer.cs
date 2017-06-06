@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExportWindow));
             this.acceptButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.reportListBox = new System.Windows.Forms.ListBox();
@@ -68,12 +69,13 @@
             this.Controls.Add(this.reportListBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.acceptButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(350, 300);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 300);
             this.Name = "ReportExportWindow";
-            this.Text = "ReportExportWindow";
+            this.Text = "Экспорт отчета";
             this.ResumeLayout(false);
 
         }

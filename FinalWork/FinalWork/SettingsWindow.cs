@@ -53,6 +53,7 @@ namespace FinalWork
         {
             Main.Enabled = true;
             Main.Show();
+            Main.Stat.DrawGraphPremium(Main.DBM, Main.PremiumZedGraphControl, Main.Op.Period);
         }
         private void UpDown_ValueChanged(object sender, EventArgs e)
         {

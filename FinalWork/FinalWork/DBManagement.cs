@@ -347,7 +347,7 @@ namespace FinalWork
             {
                 conn.Open();
                 String command = "select report_id, SUM(premium_total) from report where member_id = @name and " +
-                    "employment_id = @employment order by report_id desc limit @limit;";
+                    "employment_id = @employment group by report_id order by report_id desc limit @limit;";
 
                 SQLiteCommand cmd = new SQLiteCommand(command, conn);
                 cmd.Parameters.AddWithValue("@name", name);

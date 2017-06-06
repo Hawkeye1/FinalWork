@@ -16,8 +16,7 @@ namespace FinalWork
         public Settings Op { get; set; }
         public ImportStaff IS { get; set; }
         public ImportWorkTime IWT { get; set; }
-        public CreatingOdtHtmlFile COHF { get; set; }
-        public CreatingPdfFiles CPF { get; set; }
+        public CreatingReportFile COHF { get; set; }
         public DataTable Members {get; set;}
         public ZedGraphControl MemberZedGraphControl
         {
@@ -42,8 +41,7 @@ namespace FinalWork
             Op = new Settings("settings.fw");
             IS = new ImportStaff();
             IWT = new ImportWorkTime();
-            COHF = new CreatingOdtHtmlFile();
-            CPF = new CreatingPdfFiles();
+            COHF = new CreatingReportFile();
             Stat = new Staticstics();
 
             InitTable();

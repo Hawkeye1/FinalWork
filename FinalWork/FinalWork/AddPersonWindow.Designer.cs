@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddPersonWindow));
             this.acceptButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.memberСheckedListBox = new System.Windows.Forms.CheckedListBox();
@@ -73,7 +74,7 @@
             this.openFileButton.UseVisualStyleBackColor = true;
             this.openFileButton.Click += new System.EventHandler(this.openFileButton_Click);
             // 
-            // AddUserWindow
+            // AddPersonWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -82,11 +83,12 @@
             this.Controls.Add(this.memberСheckedListBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.acceptButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(350, 300);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 300);
-            this.Name = "AddUserWindow";
+            this.Name = "AddPersonWindow";
             this.Text = "Добавить сотрудника";
             this.ResumeLayout(false);
 

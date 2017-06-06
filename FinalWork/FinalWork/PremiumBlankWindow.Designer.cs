@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PremiumBlankWindow));
             this.premiumMenuStrip = new System.Windows.Forms.MenuStrip();
             this.ImportWorkTimeStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.AddInDBStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -326,6 +327,7 @@
             this.Controls.Add(this.nextSaveButton);
             this.Controls.Add(this.premiumMenuStrip);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.premiumMenuStrip;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

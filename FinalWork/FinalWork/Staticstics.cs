@@ -18,12 +18,18 @@ namespace FinalWork
             Double[] premiumValue = new Double[memberData.Rows.Count];
             String[] date = new String[memberData.Rows.Count];
 
-            if (!memberData.Rows[0][1].Equals(DBNull.Value))
+            if (memberData.Rows.Count != 0)
             {
-                for (int i = 0; i < memberData.Rows.Count; i++)
+                if (!memberData.Rows[0][1].Equals(DBNull.Value))
                 {
-                    premiumValue[i] = Convert.ToDouble(memberData.Rows[i][1]);
-                    date[i] = DBM.GetDate(Convert.ToInt32(memberData.Rows[i][0])).ToString("dd.MM.yyyy");
+                    for (int i = 0; i < memberData.Rows.Count; i++)
+                    {
+                        premiumValue[i] = Convert.ToDouble(memberData.Rows[i][1]);
+                        date[i] = DBM.GetDate(Convert.ToInt32(memberData.Rows[i][0])).ToString("dd.MM.yyyy");
+                    }
+
+                    Array.Reverse(date);
+                    Array.Reverse(premiumValue);
                 }
             }
 
@@ -31,8 +37,6 @@ namespace FinalWork
             pane.CurveList.Clear();
             pane.GraphItemList.Clear();
 
-            date.Reverse();
-            premiumValue.Reverse();
             BarItem curve = pane.AddBar("", null, premiumValue, Color.CornflowerBlue);
             curve.Bar.Fill.Type = FillType.Solid;
             curve.Bar.Border.IsVisible = false;
@@ -76,6 +80,11 @@ namespace FinalWork
                         date[i] = dt.ToString("dd.MM.yyyy");
                     }
                 }
+
+                Array.Reverse(budgetValue);
+                Array.Reverse(paidValue);
+                Array.Reverse(paragraphValue);
+                Array.Reverse(date);
 
                 GraphPane pane = ZGC.GraphPane;
                 pane.CurveList.Clear();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AODL.Document.Export;
 using AODL.Document.TextDocuments;
 using AODL.Document.Content.Text;
 using AODL.Document.Styles.Properties;
@@ -12,12 +13,13 @@ using iTextSharp.text.pdf;
 using System.Collections;
 using AODL.ExternalExporter.PDF.Document.ContentConverter;
 using AODL.ExternalExporter.PDF.Document.StyleConverter;
+using AODL.Document;
 
 namespace FinalWork
 {
-    public class CreatingOdtHtmlFile
+    public class CreatingReportFile
     {
-        public void CreateOdtHtmlFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, int type, string filepath, Int32[] Indexes)
+        public void CreateOdtHtmlFile(Boolean Copy, DataTable[] Blanks, Double[] Fund, int type, string filepath, Int32[] Indexes, DateTime time)
         {
             TextDocument Document = new TextDocument();
             Document.Load("template//report.odt");
@@ -36,14 +38,14 @@ namespace FinalWork
                     {
                         if (temp.Contains("date"))
                         {
-                            temp = temp.Replace("date", DateTime.Today.ToString("d"));
+                            temp = temp.Replace("date", time.ToString("d"));
                             FormatedText ft = p.TextContent[j] as FormatedText;
                             ft.Text = temp;
                             ft.TextContent[0].Text = temp;
                         }
                         else if (temp.Contains("month"))
                         {
-                            temp = temp.Replace("month", System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month - 1).ToLower());
+                            temp = temp.Replace("month", System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(time.Month - 1).ToLower());
                             FormatedText ft = p.TextContent[j] as FormatedText;
                             ft.Text = temp;
                             ft.TextContent[0].Text = temp;
@@ -111,9 +113,27 @@ namespace FinalWork
                 DataTable Blank = dv.ToTable();
 
                 Paragraph budget = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                budget.TextContent.Add(new SimpleText(Document, "По бюджетной форме"));
+                SimpleText header = new SimpleText(Document, "По бюджетной форме");
+                budget.TextContent.Add(header);
+                budget.StyleName = "Заголовоктаблицы";
                 table.Rows[currentRow].Cells[0].Content.Add(budget);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                String xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                String xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+                String xmlCell3 = table.Rows[currentRow].Cells[3].Node.OuterXml;
+                
+                // Объединение ячеек
                 table.Rows[currentRow].MergeCells(Document, 0, 4, true);
+
+                // Удаление остаточных данных
+                String innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+                innerXml = innerXml.Replace(xmlCell3, "");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
                 int budgetId = 1;
@@ -139,11 +159,31 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по бюджетной форме:"));
-                table.Rows[currentRow].Cells[1].Content.Add(result);
+                table.Rows[currentRow].Cells[0].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[0].ToString()));
                 table.Rows[currentRow].Cells[3].Content.Add(sum);
-                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+
+                // объединение ячеек
+                table.Rows[currentRow].MergeCells(Document, 0, 3, true);
+
+                // Удаление остаточных данных
+                innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+
+                // Перемещаем метку объедененной ячейки
+                innerXml = innerXml.Replace("<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />", "");
+                String mergedCellXml = table.Rows[currentRow].Cells[0].Node.OuterXml;
+                innerXml = innerXml.Replace(mergedCellXml, mergedCellXml + 
+                    "<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
             }
@@ -155,9 +195,27 @@ namespace FinalWork
                 DataTable Blank = dv.ToTable();
 
                 Paragraph paid = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                paid.TextContent.Add(new SimpleText(Document, "По платной форме"));
+                SimpleText header = new SimpleText(Document, "По платной форме");
+                paid.TextContent.Add(header);
+                paid.StyleName = "Заголовоктаблицы";
                 table.Rows[currentRow].Cells[0].Content.Add(paid);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                String xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                String xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+                String xmlCell3 = table.Rows[currentRow].Cells[3].Node.OuterXml;
+
+                // Объединение ячеек
                 table.Rows[currentRow].MergeCells(Document, 0, 4, true);
+
+                // Удаление остаточных данных
+                String innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+                innerXml = innerXml.Replace(xmlCell3, "");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
                 int paidId = 1;
@@ -183,11 +241,31 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по платной форме:"));
-                table.Rows[currentRow].Cells[1].Content.Add(result);
+                table.Rows[currentRow].Cells[0].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[1].ToString()));
                 table.Rows[currentRow].Cells[3].Content.Add(sum);
-                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+
+                // объединение ячеек
+                table.Rows[currentRow].MergeCells(Document, 0, 3, true);
+
+                // Удаление остаточных данных
+                innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+
+                // Перемещаем метку объедененной ячейки
+                innerXml = innerXml.Replace("<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />", "");
+                String mergedCellXml = table.Rows[currentRow].Cells[0].Node.OuterXml;
+                innerXml = innerXml.Replace(mergedCellXml, mergedCellXml +
+                    "<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
             }
@@ -199,9 +277,27 @@ namespace FinalWork
                 DataTable Blank = dv.ToTable();
 
                 Paragraph paragraph = ParagraphBuilder.CreateStandardTextParagraph(Document);
-                paragraph.TextContent.Add(new SimpleText(Document, "По §54"));
+                SimpleText header = new SimpleText(Document, "По  §54");
+                paragraph.TextContent.Add(header);
+                paragraph.StyleName = "Заголовоктаблицы";
                 table.Rows[currentRow].Cells[0].Content.Add(paragraph);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                String xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                String xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+                String xmlCell3 = table.Rows[currentRow].Cells[3].Node.OuterXml;
+
+                // Объединение ячеек
                 table.Rows[currentRow].MergeCells(Document, 0, 4, true);
+
+                // Удаление остаточных данных
+                String innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+                innerXml = innerXml.Replace(xmlCell3, "");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
                 int paragraphId = 1;
@@ -227,11 +323,31 @@ namespace FinalWork
 
                 Paragraph result = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 result.TextContent.Add(new SimpleText(Document, "Итого по §54:"));
-                table.Rows[currentRow].Cells[1].Content.Add(result);
+                table.Rows[currentRow].Cells[0].Content.Add(result);
                 Paragraph sum = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 sum.TextContent.Add(new SimpleText(Document, Fund[2].ToString()));
                 table.Rows[currentRow].Cells[3].Content.Add(sum);
-                table.Rows[currentRow].MergeCells(Document, 2, 2, true);
+
+                // Сохраняем xml код ячеек которые будут объеднены,
+                // чтобы удалить оставшуюся информацию после объединения
+
+                xmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+                xmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+
+                // объединение ячеек
+                table.Rows[currentRow].MergeCells(Document, 0, 3, true);
+
+                // Удаление остаточных данных
+                innerXml = table.Rows[currentRow].Node.InnerXml;
+                innerXml = innerXml.Replace(xmlCell1, "");
+                innerXml = innerXml.Replace(xmlCell2, "");
+
+                // Перемещаем метку объедененной ячейки
+                innerXml = innerXml.Replace("<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />", "");
+                String mergedCellXml = table.Rows[currentRow].Cells[0].Node.OuterXml;
+                innerXml = innerXml.Replace(mergedCellXml, mergedCellXml +
+                    "<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />");
+                table.Rows[currentRow].Node.InnerXml = innerXml;
 
                 currentRow++;
             }
@@ -240,11 +356,31 @@ namespace FinalWork
 
             Paragraph total = ParagraphBuilder.CreateStandardTextParagraph(Document);
             total.TextContent.Add(new SimpleText(Document, "Итого:"));
-            table.Rows[currentRow].Cells[1].Content.Add(total);
+            table.Rows[currentRow].Cells[0].Content.Add(total);
             Paragraph totalSum = ParagraphBuilder.CreateStandardTextParagraph(Document);
             totalSum.TextContent.Add(new SimpleText(Document, totalFund.ToString()));
             table.Rows[currentRow].Cells[3].Content.Add(totalSum);
-            table.Rows[currentRow].MergeCells(Document, 2, 2, true);
+            
+            // Сохраняем xml код ячеек которые будут объеднены,
+            // чтобы удалить оставшуюся информацию после объединения
+
+            String finalXmlCell1 = table.Rows[currentRow].Cells[1].Node.OuterXml;
+            String finalXmlCell2 = table.Rows[currentRow].Cells[2].Node.OuterXml;
+
+            // объединение ячеек
+            table.Rows[currentRow].MergeCells(Document, 0, 3, true);
+
+            // Удаление остаточных данных
+            String finalInnerXml = table.Rows[currentRow].Node.InnerXml;
+            finalInnerXml = finalInnerXml.Replace(finalXmlCell1, "");
+            finalInnerXml = finalInnerXml.Replace(finalXmlCell2, "");
+
+            // Перемещаем метку объедененной ячейки
+            finalInnerXml = finalInnerXml.Replace("<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />", "");
+            String mergedFinalCellXml = table.Rows[currentRow].Cells[0].Node.OuterXml;
+            finalInnerXml = finalInnerXml.Replace(mergedFinalCellXml, mergedFinalCellXml +
+                "<table:covered-table-cell xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" />");
+            table.Rows[currentRow].Node.InnerXml = finalInnerXml;
 
             Document.Content.Insert(tableId, table);
 

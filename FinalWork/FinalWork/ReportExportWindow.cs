@@ -71,7 +71,7 @@ namespace FinalWork
             }
 
             Int32[] indexes = { 0, 1, 2 };
-            Main.COHF.CreateOdtHtmlFile(false, forms, funds, fileIndex, filePath, indexes);
+            Main.COHF.CreateOdtHtmlFile(false, forms, funds, fileIndex, filePath, indexes, Convert.ToDateTime(ArchiveData.Rows[report_id - 1][1].ToString()));
         }
 
         private void acceptButton_Click(object sender, EventArgs e)

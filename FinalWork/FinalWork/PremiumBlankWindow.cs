@@ -360,6 +360,7 @@ namespace FinalWork
             Main.Enabled = true;
             Main.Show();
             Main.AddInTable();
+            Main.Stat.DrawGraphPremium(Main.DBM, Main.PremiumZedGraphControl, Main.Op.Period);
         }
 
         private void AddMembersStrip_Click(object sender, EventArgs e)
@@ -607,6 +608,8 @@ namespace FinalWork
 
                     Blanks[Step].Rows.Remove(Blanks[Step].Select("ФИО = '" + blankDataGridView.CurrentRow.Cells[0].Value.ToString() + "'")[0]);
                     PC.Calculation(this);
+                    CheckMembersInDB(blankDataGridView);
+                    MarkMembers();
                 }
             }
         }
@@ -682,10 +685,6 @@ namespace FinalWork
                             TotalFund[2] = Convert.ToDouble(totalFundTextBox.Text);
                             Blanks[2] = blankDataGridView.DataSource as DataTable;
 
-                            Main.DBM.AddRecords(Blanks, FORMCOUNT);
-                            Main.DBM.AddPremiums(TotalFund);
-                            Main.DBM.AddArchive();
-
                             SaveFileDialog SFD = new SaveFileDialog();
                             SFD.Filter = "odt file (*.odt)|*.odt|html file (*.html)|*.html|pdf file (*.pdf)|*.pdf";
                             SFD.InitialDirectory = Directory.GetCurrentDirectory();
@@ -694,8 +693,12 @@ namespace FinalWork
 
                             if (SFD.ShowDialog() == DialogResult.OK)
                             {
+                                Main.DBM.AddRecords(Blanks, FORMCOUNT);
+                                Main.DBM.AddPremiums(TotalFund);
+                                Main.DBM.AddArchive();
+
                                 Int32[] indexes = { 0, 1, 15 };
-                                Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName, indexes);
+                                Main.COHF.CreateOdtHtmlFile(Main.Op.SaveCopy, Blanks, TotalFund, SFD.FilterIndex, SFD.FileName, indexes, DateTime.Now);
                             }
                         }
 
