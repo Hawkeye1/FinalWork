@@ -14,6 +14,7 @@ using System.Collections;
 using AODL.ExternalExporter.PDF.Document.ContentConverter;
 using AODL.ExternalExporter.PDF.Document.StyleConverter;
 using AODL.Document;
+using AODL.Document.Styles;
 
 namespace FinalWork
 {
@@ -115,7 +116,7 @@ namespace FinalWork
                 Paragraph budget = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 SimpleText header = new SimpleText(Document, "По бюджетной форме");
                 budget.TextContent.Add(header);
-                budget.StyleName = "Заголовоктаблицы";
+                budget.Style = Document.CommonStyles.Single(x => x.StyleName == "Заголовоктаблицы") as ParagraphStyle;
                 table.Rows[currentRow].Cells[0].Content.Add(budget);
 
                 // Сохраняем xml код ячеек которые будут объеднены,
@@ -197,7 +198,7 @@ namespace FinalWork
                 Paragraph paid = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 SimpleText header = new SimpleText(Document, "По платной форме");
                 paid.TextContent.Add(header);
-                paid.StyleName = "Заголовоктаблицы";
+                paid.Style = Document.CommonStyles.Single(x => x.StyleName == "Заголовоктаблицы") as ParagraphStyle;
                 table.Rows[currentRow].Cells[0].Content.Add(paid);
 
                 // Сохраняем xml код ячеек которые будут объеднены,
@@ -279,7 +280,7 @@ namespace FinalWork
                 Paragraph paragraph = ParagraphBuilder.CreateStandardTextParagraph(Document);
                 SimpleText header = new SimpleText(Document, "По  §54");
                 paragraph.TextContent.Add(header);
-                paragraph.StyleName = "Заголовоктаблицы";
+                paragraph.Style = Document.CommonStyles.Single(x => x.StyleName == "Заголовоктаблицы") as ParagraphStyle;
                 table.Rows[currentRow].Cells[0].Content.Add(paragraph);
 
                 // Сохраняем xml код ячеек которые будут объеднены,
